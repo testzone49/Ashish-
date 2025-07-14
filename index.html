@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test Zone</title>
+  <style>
+    body { font-family: Arial; background: #f9f9f9; padding: 20px; }
+    .header { background: #003366; color: white; padding: 15px; font-size: 24px; text-align: center; }
+    .question-box { background: white; border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 600px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .options { margin-top: 15px; }
+    .options label { display: block; margin-bottom: 10px; }
+    button { padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #218838; }
+  </style>
+</head>
+<body>
+  <div class="header">📝 Test Zone - CBT Mock</div>
+  <div class="question-box">
+    <div id="question">Question will appear here</div>
+    <div class="options" id="options"></div>
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q: "भारताची राजधानी कोणती आहे? / What is the capital of India?",
+        o: ["दिल्ली", "मुंबई", "कोलकाता", "चेन्नई"],
+        a: "दिल्ली"
+      },
+      {
+        q: "2 + 2 किती होतात? / What is 2 + 2?",
+        o: ["3", "4", "5", "2"],
+        a: "4"
+      }
+    ];
+
+    let index = 0;
+    function showQuestion() {
+      const q = questions[index];
+      document.getElementById("question").innerText = q.q;
+      const options = q.o.map(opt => `<label><input type="radio" name="opt" value="${opt}"> ${opt}</label>`).join('');
+      document.getElementById("options").innerHTML = options;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="opt"]:checked');
+      if (!selected) return alert("उत्तर निवडा!");
+      if (selected.value === questions[index].a) {
+        alert("✅ बरोबर उत्तर!");
+      } else {
+        alert("❌ चूक उत्तर!");
+      }
+      index++;
+      if (index < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById("question").innerText = "परीक्षा पूर्ण!";
+        document.getElementById("options").innerHTML = "";
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
