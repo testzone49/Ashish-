@@ -1,10 +1,131 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Test Zone</title>
-  </head>
-  <body>
-    <h1>✅ Working! This is the correct page.</h1>
-    <p>You can now add TCS-style interface.</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Test Zone - CBT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .navbar {
+      background-color: #0f3c68;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      font-size: 22px;
+    }
+    .container {
+      display: flex;
+      height: calc(100vh - 50px);
+    }
+    .sidebar {
+      width: 20%;
+      background: #f0f0f0;
+      padding: 15px;
+      overflow-y: auto;
+      border-right: 1px solid #ccc;
+    }
+    .sidebar button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: none;
+      background-color: #dbe9ff;
+      cursor: pointer;
+      text-align: left;
+    }
+    .content {
+      width: 80%;
+      padding: 20px;
+    }
+    .question {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .submit-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #0f3c68;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .footer {
+      padding: 10px;
+      text-align: center;
+      background: #eee;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">🧪 Test Zone - CBT Practice</div>
+
+  <div class="container">
+    <div class="sidebar">
+      <button onclick="loadQuestion(0)">Q1</button>
+      <button onclick="loadQuestion(1)">Q2</button>
+      <button onclick="loadQuestion(2)">Q3</button>
+    </div>
+    <div class="content">
+      <div class="question" id="questionBox">Loading...</div>
+      <div class="options" id="optionsBox"></div>
+      <button class="submit-btn" onclick="nextQuestion()">Next</button>
+    </div>
+  </div>
+
+  <div class="footer">Created by Ashish for personal practice use</div>
+
+  <script>
+    const questions = [
+      {
+        q: "भारताची राजधानी कोणती आहे? / What is the capital of India?",
+        options: ["दिल्ली", "मुंबई", "कोलकाता", "चेन्नई"],
+        answer: "दिल्ली"
+      },
+      {
+        q: "2 + 2 किती होतात? / What is 2 + 2?",
+        options: ["3", "4", "5", "2"],
+        answer: "4"
+      },
+      {
+        q: "पृथ्वीवर किती महाद्वीप आहेत? / How many continents are there on Earth?",
+        options: ["5", "6", "7", "8"],
+        answer: "7"
+      }
+    ];
+
+    let current = 0;
+
+    function loadQuestion(i) {
+      current = i;
+      const q = questions[i];
+      document.getElementById("questionBox").innerText = q.q;
+      document.getElementById("optionsBox").innerHTML = q.options.map(opt =>
+        `<label><input type="radio" name="option" value="${opt}"> ${opt}</label>`
+      ).join('');
+    }
+
+    function nextQuestion() {
+      if (current < questions.length - 1) {
+        loadQuestion(current + 1);
+      } else {
+        alert("Test Complete. Thank you!");
+      }
+    }
+
+    // Load first question on start
+    loadQuestion(0);
+  </script>
+
+</body>
 </html>
