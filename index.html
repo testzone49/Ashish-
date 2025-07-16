@@ -2,130 +2,163 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Test Zone - CBT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Zone - CBT Exam</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      background: #f2f2f2;
     }
-    .navbar {
-      background-color: #0f3c68;
+    header {
+      background: #004080;
       color: white;
       padding: 10px;
       text-align: center;
-      font-size: 22px;
+      font-size: 1.5em;
     }
     .container {
       display: flex;
-      height: calc(100vh - 50px);
+      height: calc(100vh - 60px);
     }
     .sidebar {
-      width: 20%;
-      background: #f0f0f0;
+      width: 200px;
+      background: #e6e6e6;
       padding: 15px;
       overflow-y: auto;
-      border-right: 1px solid #ccc;
     }
     .sidebar button {
       display: block;
       width: 100%;
-      margin-bottom: 10px;
+      margin: 5px 0;
       padding: 10px;
       border: none;
-      background-color: #dbe9ff;
+      background: #ccc;
       cursor: pointer;
-      text-align: left;
     }
-    .content {
-      width: 80%;
+    .sidebar button.active {
+      background: #004080;
+      color: white;
+    }
+    .main {
+      flex: 1;
       padding: 20px;
+      background: white;
+      overflow-y: auto;
     }
     .question {
-      font-size: 18px;
-      margin-bottom: 20px;
+      font-size: 1.2em;
+      margin-bottom: 15px;
     }
     .options label {
       display: block;
-      margin-bottom: 10px;
-      cursor: pointer;
+      margin-bottom: 8px;
     }
-    .submit-btn {
+    .buttons {
       margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #0f3c68;
+    }
+    .buttons button {
+      margin-right: 10px;
+      padding: 10px 15px;
+      background: #004080;
       color: white;
       border: none;
       cursor: pointer;
     }
-    .footer {
-      padding: 10px;
+    footer {
       text-align: center;
+      padding: 10px;
       background: #eee;
-      font-size: 14px;
+      font-size: 0.9em;
     }
   </style>
 </head>
 <body>
-
-  <div class="navbar">🧪 Test Zone - CBT Practice</div>
-
+  <header>
+    Test Zone - CBT Exam Practice
+  </header>
   <div class="container">
-    <div class="sidebar">
-      <button onclick="loadQuestion(0)">Q1</button>
-      <button onclick="loadQuestion(1)">Q2</button>
-      <button onclick="loadQuestion(2)">Q3</button>
-    </div>
-    <div class="content">
-      <div class="question" id="questionBox">Loading...</div>
-      <div class="options" id="optionsBox"></div>
-      <button class="submit-btn" onclick="nextQuestion()">Next</button>
+    <div class="sidebar" id="questionList"></div>
+    <div class="main">
+      <div id="questionContainer"></div>
+      <div class="buttons">
+        <button onclick="saveAnswer()">Save & Next</button>
+        <button onclick="submitExam()">Submit</button>
+      </div>
     </div>
   </div>
-
-  <div class="footer">Created by Ashish for personal practice use</div>
-
+  <footer>
+    Created by Ashish Wagh for personal & family exam practice
+  </footer>
   <script>
     const questions = [
       {
-        q: "भारताची राजधानी कोणती आहे? / What is the capital of India?",
-        options: ["दिल्ली", "मुंबई", "कोलकाता", "चेन्नई"],
-        answer: "दिल्ली"
+        q: "What is 2 + 2?",
+        options: ["3", "4", "5", "6"],
+        answer: 1
       },
       {
-        q: "2 + 2 किती होतात? / What is 2 + 2?",
-        options: ["3", "4", "5", "2"],
-        answer: "4"
-      },
-      {
-        q: "पृथ्वीवर किती महाद्वीप आहेत? / How many continents are there on Earth?",
-        options: ["5", "6", "7", "8"],
-        answer: "7"
+        q: "Capital of Maharashtra?",
+        options: ["Pune", "Nagpur", "Mumbai", "Nashik"],
+        answer: 2
       }
     ];
 
-    let current = 0;
+    let currentQuestion = 0;
+    let responses = Array(questions.length).fill(null);
 
-    function loadQuestion(i) {
-      current = i;
-      const q = questions[i];
-      document.getElementById("questionBox").innerText = q.q;
-      document.getElementById("optionsBox").innerHTML = q.options.map(opt =>
-        `<label><input type="radio" name="option" value="${opt}"> ${opt}</label>`
-      ).join('');
+    const questionList = document.getElementById("questionList");
+    const questionContainer = document.getElementById("questionContainer");
+
+    questions.forEach((_, index) => {
+      const btn = document.createElement("button");
+      btn.textContent = index + 1;
+      btn.onclick = () => loadQuestion(index);
+      btn.id = `btn-${index}`;
+      questionList.appendChild(btn);
+    });
+
+    function loadQuestion(index) {
+      currentQuestion = index;
+      document.querySelectorAll(".sidebar button").forEach(btn => btn.classList.remove("active"));
+      document.getElementById(`btn-${index}`).classList.add("active");
+
+      const q = questions[index];
+      let html = `<div class='question'>Q${index + 1}. ${q.q}</div>`;
+      html += `<div class='options'>`;
+      q.options.forEach((opt, i) => {
+        const checked = responses[index] === i ? "checked" : "";
+        html += `<label><input type='radio' name='opt' value='${i}' ${checked}> ${opt}</label>`;
+      });
+      html += `</div>`;
+      questionContainer.innerHTML = html;
     }
 
-    function nextQuestion() {
-      if (current < questions.length - 1) {
-        loadQuestion(current + 1);
+    function saveAnswer() {
+      const selected = document.querySelector("input[name='opt']:checked");
+      if (selected) {
+        responses[currentQuestion] = parseInt(selected.value);
+        document.getElementById(`btn-${currentQuestion}`).style.background = '#0c0';
+        const next = currentQuestion + 1;
+        if (next < questions.length) {
+          loadQuestion(next);
+        } else {
+          alert("You have reached the last question.");
+        }
       } else {
-        alert("Test Complete. Thank you!");
+        alert("Please select an option.");
       }
     }
 
-    // Load first question on start
+    function submitExam() {
+      let score = 0;
+      questions.forEach((q, i) => {
+        if (responses[i] === q.answer) score++;
+      });
+      alert(`Your score: ${score} / ${questions.length}`);
+    }
+
     loadQuestion(0);
   </script>
-
 </body>
 </html>
