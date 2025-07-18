@@ -1,241 +1,88 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test Zone CBT</title>
+  <title>TestZone CBT - 20Q</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f2f2f2; }
-    .container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
-    .question { font-weight: bold; margin-bottom: 10px; }
-    .options label { display: block; margin-bottom: 5px; }
-    #submitBtn { margin-top: 20px; padding: 10px 20px; }
-    #result { margin-top: 30px; font-weight: bold; }
-    .correct { color: green; }
-    .wrong { color: red; }
+    body { font-family: Arial; background: #f0f0f0; margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: auto; background: white; padding: 20px; box-shadow: 0 0 10px #aaa; margin-top: 30px; }
+    .question { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+    .options input { margin-right: 10px; }
+    .correct { background-color: #d4edda; }
+    .wrong { background-color: #f8d7da; }
+    #submit { background: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+    #submit:hover { background: #218838; }
+    #summary { margin-top: 30px; padding: 10px; background: #e9ecef; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Test Zone CBT</h2>
-    <div id="timer">Time left: <span id="time">20:00</span></div>
+    <h2>TestZone - 20 Questions Practice</h2>
     <form id="quizForm">
-      <div id="quiz"></div>
-      <button type="button" id="submitBtn">Submit</button>
+      <div id="questions"></div>
+      <button type="submit" id="submit">Submit</button>
     </form>
-    <div id="result"></div>
+    <div id="summary" style="display:none;"></div>
   </div>
 
+  <script src="questions.js"></script>
   <script>
-    const questions = [
-      {
-        <div class="question" data-answer="A">
-  <p><strong>Q1:</strong> 2025 चा वर्गमूळ किती आहे? / What is the square root of 2025?</p>
-  <label><input type="radio" name="q1" value="A"> 45</label><br>
-  <label><input type="radio" name="q1" value="B"> 40</label><br>
-  <label><input type="radio" name="q1" value="C"> 50</label><br>
-  <label><input type="radio" name="q1" value="D"> 55</label>
-</div>
+    const form = document.getElementById("quizForm");
+    const questionsContainer = document.getElementById("questions");
+    const summaryDiv = document.getElementById("summary");
 
-<div class="question" data-answer="B">
-  <p><strong>Q2:</strong> खालीलपैकी कोणता अभाज्य संख्या आहे? / Which of the following is a prime number?</p>
-  <label><input type="radio" name="q2" value="A"> 87</label><br>
-  <label><input type="radio" name="q2" value="B"> 97</label><br>
-  <label><input type="radio" name="q2" value="C"> 91</label><br>
-  <label><input type="radio" name="q2" value="D"> 93</label>
-</div>
+    const url = "https://script.google.com/macros/s/AKfycbxfTqfxMgU9kmsV4V0AsBZ3L6Om4QHVyIWYNaGyWRCVDIvlmygpgJvh5dWOWKWt90wk/exec";
 
-<div class="question" data-answer="A">
-  <p><strong>Q3:</strong> 5x – 3 = 2x + 12, तर x चे मूल्य काय? / What is the value of x?</p>
-  <label><input type="radio" name="q3" value="A"> 5</label><br>
-  <label><input type="radio" name="q3" value="B"> 6</label><br>
-  <label><input type="radio" name="q3" value="C"> 4</label><br>
-  <label><input type="radio" name="q3" value="D"> 3</label>
-</div>
+    const user = prompt("Enter your name (ashish, akshay, etc):", "ashish");
 
-<div class="question" data-answer="B">
-  <p><strong>Q4:</strong> "Abandon" या शब्दाचा समानार्थी शब्द कोणता? / What is the synonym of "Abandon"?</p>
-  <label><input type="radio" name="q4" value="A"> Accept</label><br>
-  <label><input type="radio" name="q4" value="B"> Leave</label><br>
-  <label><input type="radio" name="q4" value="C"> Change</label><br>
-  <label><input type="radio" name="q4" value="D"> Follow</label>
-</div>
-
-<div class="question" data-answer="C">
-  <p><strong>Q5:</strong> योग्य क्रम लावा: College, School, Job, Admission / Arrange the sequence</p>
-  <label><input type="radio" name="q5" value="A"> 2-1-4-3</label><br>
-  <label><input type="radio" name="q5" value="B"> 4-2-1-3</label><br>
-  <label><input type="radio" name="q5" value="C"> 2-4-1-3</label><br>
-  <label><input type="radio" name="q5" value="D"> 1-2-4-3</label>
-</div>
-
-<div class="question" data-answer="C">
-  <p><strong>Q6:</strong> 2, 4, 8, 16, ? – पुढचा संख्या कोणती? / What is the next number?</p>
-  <label><input type="radio" name="q6" value="A"> 24</label><br>
-  <label><input type="radio" name="q6" value="B"> 30</label><br>
-  <label><input type="radio" name="q6" value="C"> 32</label><br>
-  <label><input type="radio" name="q6" value="D"> 36</label>
-</div>
-
-<div class="question" data-answer="C">
-  <p><strong>Q7:</strong> खालीलपैकी कोणती programming language नाही? / Which is not a programming language?</p>
-  <label><input type="radio" name="q7" value="A"> Python</label><br>
-  <label><input type="radio" name="q7" value="B"> Java</label><br>
-  <label><input type="radio" name="q7" value="C"> HTML</label><br>
-  <label><input type="radio" name="q7" value="D"> SQL</label>
-</div>
-
-<div class="question" data-answer="B">
-  <p><strong>Q8:</strong> भारताचे सध्याचे Chief Justice कोण आहेत? / Who is the current Chief Justice of India?</p>
-  <label><input type="radio" name="q8" value="A"> U.U. Lalit</label><br>
-  <label><input type="radio" name="q8" value="B"> D.Y. Chandrachud</label><br>
-  <label><input type="radio" name="q8" value="C"> N.V. Ramana</label><br>
-  <label><input type="radio" name="q8" value="D"> Sharad Bobde</label>
-</div>
-
-<div class="question" data-answer="A">
-  <p><strong>Q9:</strong> 30 मिनिटांपूर्वी 3 वाजले होते आणि वेळेचा तीनपट झाला होता, तर आताची वेळ काय? / What is the current time?</p>
-  <label><input type="radio" name="q9" value="A"> 3:33</label><br>
-  <label><input type="radio" name="q9" value="B"> 3:36</label><br>
-  <label><input type="radio" name="q9" value="C"> 3:30</label><br>
-  <label><input type="radio" name="q9" value="D"> 3:45</label>
-</div>
-
-<div class="question" data-answer="A">
-  <p><strong>Q10:</strong> 12, 15 आणि 20 यांचा ल.सा.का (LCM) किती? / What is the LCM of 12, 15 and 20?</p>
-  <label><input type="radio" name="q10" value="A"> 120</label><br>
-  <label><input type="radio" name="q10" value="B"> 60</label><br>
-  <label><input type="radio" name="q10" value="C"> 240</label><br>
-  <label><input type="radio" name="q10" value="D"> 180</label>
-</div>
-
-    <div class="question" data-answer="C">
-  <p><strong>Q11:</strong> "CHAT" या शब्दातील अक्षरांची संख्या मोजून त्यांचे position चे बेरीज किती? / What is the sum of letter positions in "CHAT"?</p>
-  <label><input type="radio" name="q11" value="A"> 40</label><br>
-  <label><input type="radio" name="q11" value="B"> 38</label><br>
-  <label><input type="radio" name="q11" value="C"> 43</label><br>
-  <label><input type="radio" name="q11" value="D"> 36</label>
-</div>
-
-<div class="question" data-answer="C">
-  <p><strong>Q12:</strong> अर्जेंटिनाची राजधानी कोणती आहे? / What is the capital of Argentina?</p>
-  <label><input type="radio" name="q12" value="A"> Santiago</label><br>
-  <label><input type="radio" name="q12" value="B"> Rio de Janeiro</label><br>
-  <label><input type="radio" name="q12" value="C"> Buenos Aires</label><br>
-  <label><input type="radio" name="q12" value="D"> Lima</label>
-</div>
-
-<div class="question" data-answer="A">
-  <p><strong>Q13:</strong> मानव शरीरातील सर्वात मोठी हाड कोणती? / Largest bone in human body?</p>
-  <label><input type="radio" name="q13" value="A"> Femur</label><br>
-  <label><input type="radio" name="q13" value="B"> Tibia</label><br>
-  <label><input type="radio" name="q13" value="C"> Spine</label><br>
-  <label><input type="radio" name="q13" value="D"> Radius</label>
-</div>
-
-<div class="question" data-answer="B">
-  <p><strong>Q14:</strong> Pen : Write :: Knife : ?</p>
-  <label><input type="radio" name="q14" value="A"> Paint</label><br>
-  <label><input type="radio" name="q14" value="B"> Cut</label><br>
-  <label><input type="radio" name="q14" value="C"> Cook</label><br>
-  <label><input type="radio" name="q14" value="D"> Shape</label>
-</div>
-
-<div class="question" data-answer="A">
-  <p><strong>Q15:</strong> प्लासीची लढाई कोणत्या वर्षी झाली? / In which year was the Battle of Plassey?</p>
-  <label><input type="radio" name="q15" value="A"> 1757</label><br>
-  <label><input type="radio" name="q15" value="B"> 1857</label><br>
-  <label><input type="radio" name="q15" value="C"> 1761</label><br>
-  <label><input type="radio" name="q15" value="D"> 1782</label>
-</div>
-
-<div class="question" data-answer="A">
-  <p><strong>Q16:</strong> बोट 2 तासात 36 किमी downstream आणि 3 तासात upstream जाते, तर स्थिर पाण्यात गती किती? / Boat speed in still water?</p>
-  <label><input type="radio" name="q16" value="A"> 10 km/hr</label><br>
-  <label><input type="radio" name="q16" value="B"> 12 km/hr</label><br>
-  <label><input type="radio" name="q16" value="C"> 15 km/hr</label><br>
-  <label><input type="radio" name="q16" value="D"> 18 km/hr</label>
-</div>
-
-<div class="question" data-answer="C">
-  <p><strong>Q17:</strong> वडील व मुलाचे सध्याचे वयाचे प्रमाण 5:2 आहे. 10 वर्षांनी ते 3:2 होते. वडिलांचे सध्याचे वय काय? / Father's current age?</p>
-  <label><input type="radio" name="q17" value="A"> 40</label><br>
-  <label><input type="radio" name="q17" value="B"> 45</label><br>
-  <label><input type="radio" name="q17" value="C"> 50</label><br>
-  <label><input type="radio" name="q17" value="D"> 60</label>
-</div>
-
-<div class="question" data-answer="B">
-  <p><strong>Q18:</strong> शिक्षणाचा हक्क कोणत्या घटनेच्या अनुच्छेदात आहे? / Right to Education is under which Article?</p>
-  <label><input type="radio" name="q18" value="A"> Article 14</label><br>
-  <label><input type="radio" name="q18" value="B"> Article 21A</label><br>
-  <label><input type="radio" name="q18" value="C"> Article 15</label><br>
-  <label><input type="radio" name="q18" value="D"> Article 19</label>
-</div>
-
-<div class="question" data-answer="A">
-  <p><strong>Q19:</strong> "Obvious" या शब्दाचा विरुद्धार्थी शब्द कोणता? / Antonym of "Obvious"?</p>
-  <label><input type="radio" name="q19" value="A"> Vague</label><br>
-  <label><input type="radio" name="q19" value="B"> Clear</label><br>
-  <label><input type="radio" name="q19" value="C"> Apparent</label><br>
-  <label><input type="radio" name="q19" value="D"> Evident</label>
-</div>
-
-<div class="question" data-answer="B">
-  <p><strong>Q20:</strong> 5 × 5 च्या चौकोनी grid मध्ये किती एकूण squares असतील? / How many squares in a 5×5 grid?</p>
-  <label><input type="radio" name="q20" value="A"> 25</label><br>
-  <label><input type="radio" name="q20" value="B"> 55</label><br>
-  <label><input type="radio" name="q20" value="C"> 30</label><br>
-  <label><input type="radio" name="q20" value="D"> 50</label>
-</div>
-
-    ];
-
-    let currentTime = 1200; // 20 minutes
-    const timerEl = document.getElementById('time');
-    const timer = setInterval(() => {
-      if (currentTime <= 0) {
-        clearInterval(timer);
-        document.getElementById("submitBtn").click();
-        return;
-      }
-      currentTime--;
-      let minutes = Math.floor(currentTime / 60);
-      let seconds = currentTime % 60;
-      timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    }, 1000);
-
-    const quizContainer = document.getElementById("quiz");
-    questions.forEach((q, i) => {
-      const div = document.createElement("div");
-      div.classList.add("question-block");
-      div.innerHTML = `
-        <p class="question">${i + 1}. ${q.q}</p>
-        <div class="options">
-          ${q.options.map((opt, idx) => `
-            <label><input type="radio" name="q${i}" value="${String.fromCharCode(65+idx)}" /> ${opt}</label>
-          `).join("")}
-        </div>
-      `;
-      quizContainer.appendChild(div);
-    });
-
-    document.getElementById("submitBtn").addEventListener("click", () => {
-      clearInterval(timer);
-      let score = 0;
-      const result = document.getElementById("result");
-      result.innerHTML = "";
+    function renderQuestions() {
       questions.forEach((q, i) => {
-        const selected = document.querySelector(`input[name="q${i}"]:checked`);
-        const selectedVal = selected ? selected.value : "None";
-        const correct = q.answer;
-        const isCorrect = selectedVal === correct;
-        const colorClass = isCorrect ? "correct" : "wrong";
-        if (isCorrect) score++;
-        result.innerHTML += `<p class="${colorClass}">${i + 1}. तुमचं उत्तर: ${selectedVal || "निवडलं नाही"} | बरोबर उत्तर: ${correct}</p>`;
+        const div = document.createElement("div");
+        div.className = "question";
+        div.id = "qbox" + i;
+        div.innerHTML = \`<strong>Q\${i + 1}:</strong> \${q.q} <br>
+          <div class="options">
+            \${q.options.map((opt, j) =>
+              \`<label><input type="radio" name="q\${i}" value="\${String.fromCharCode(65 + j)}"> \${opt}</label><br>\`).join('')}
+          </div>\`;
+        questionsContainer.appendChild(div);
       });
-      result.innerHTML += `<p><strong>Final Score: ${score} / ${questions.length}</strong></p>`;
-    });
+    }
+
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      let correct = 0, wrong = 0, skipped = 0;
+      questions.forEach((q, i) => {
+        const radios = form["q" + i];
+        const selected = [...radios].find(r => r.checked);
+        const qbox = document.getElementById("qbox" + i);
+
+        if (!selected) {
+          skipped++;
+          return;
+        }
+        if (selected.value === q.answer) {
+          correct++;
+          qbox.classList.add("correct");
+        } else {
+          wrong++;
+          qbox.classList.add("wrong");
+        }
+      });
+
+      const score = \`\${correct}/\${questions.length}\`;
+      summaryDiv.style.display = "block";
+      summaryDiv.innerHTML = \`✅ Correct: \${correct}<br>❌ Wrong: \${wrong}<br>⏭️ Skipped: \${skipped}<br>🏁 Score: \${score}\`;
+
+      fetch(url, {
+        method: "POST",
+        body: JSON.stringify({ name: user, score, correct, wrong, skipped }),
+        headers: { "Content-Type": "application/json" }
+      }).then(r => r.text()).then(console.log);
+    }
+
+    renderQuestions();
   </script>
 </body>
 </html>
