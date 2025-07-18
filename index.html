@@ -1,76 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TestZone - CBT Practice</title>
+  <title>Test Zone CBT</title>
   <style>
-    body {
-      font-family: Arial;
-      background-color: #f8f9fa;
-      margin: 0;
-    }
-    .header {
-      background-color: #003366;
-      color: white;
-      padding: 10px;
-      text-align: center;
-    }
-    .timer {
-      font-size: 18px;
-      font-weight: bold;
-      color: #ff3300;
-    }
-    .container {
-      display: flex;
-      padding: 10px;
-    }
-    .question-box {
-      flex: 3;
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-right: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    .palette {
-      flex: 1;
-      background-color: #f1f1f1;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
-    .palette button {
-      margin: 5px;
-      width: 40px;
-      height: 40px;
-      font-weight: bold;
-      border-radius: 50%;
-      border: none;
-      background-color: #cce5ff;
-      cursor: pointer;
-    }
-    .palette button.active {
-      background-color: #007bff;
-      color: white;
-    }
+    body { font-family: sans-serif; padding: 20px; background: #f2f2f2; }
+    .container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+    .question { font-weight: bold; margin-bottom: 10px; }
+    .options label { display: block; margin-bottom: 5px; }
+    #submitBtn { margin-top: 20px; padding: 10px 20px; }
+    #result { margin-top: 30px; font-weight: bold; }
+    .correct { color: green; }
+    .wrong { color: red; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h2>TestZone - CBT Exam Interface</h2>
-    <div class="timer">Time Left: <span id="time">20:00</span></div>
-  </div>
-
   <div class="container">
-    <div class="question-box">
-      <h3 id="question">Loading question...</h3>
-      <div id="options"></div>
-    </div>
-    <div class="palette" id="questionButtons">
-      <!-- Q buttons will appear here -->
-    </div>
+    <h2>Test Zone CBT</h2>
+    <div id="timer">Time left: <span id="time">20:00</span></div>
+    <form id="quizForm">
+      <div id="quiz"></div>
+      <button type="button" id="submitBtn">Submit</button>
+    </form>
+    <div id="result"></div>
   </div>
 
   <script>
@@ -78,79 +31,61 @@
       {
         q: "भारताची राजधानी कोणती आहे? / What is the capital of India?",
         options: ["दिल्ली", "मुंबई", "कोलकाता", "चेन्नई"],
-        correct: "A"
+        answer: "A"
       },
       {
         q: "2 + 2 किती होतात? / What is 2 + 2?",
         options: ["3", "4", "5", "2"],
-        correct: "B"
-      },
-      {
-        q: "सूर्य पूर्वेकडून उगवतो का? / Does the sun rise in the east?",
-        options: ["होय", "नाही", "कधी कधी", "माहित नाही"],
-        correct: "A"
+        answer: "B"
       }
-      // Add more...
+      // आणखी प्रश्न इथे टाका
     ];
 
-    let current = 0;
-    const questionEl = document.getElementById("question");
-    const optionsEl = document.getElementById("options");
-    const buttonsDiv = document.getElementById("questionButtons");
+    let currentTime = 1200; // 20 minutes
+    const timerEl = document.getElementById('time');
+    const timer = setInterval(() => {
+      if (currentTime <= 0) {
+        clearInterval(timer);
+        document.getElementById("submitBtn").click();
+        return;
+      }
+      currentTime--;
+      let minutes = Math.floor(currentTime / 60);
+      let seconds = currentTime % 60;
+      timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
 
-    function showQuestion(index) {
-      current = index;
-      const q = questions[index];
-      questionEl.innerText = `Q${index + 1}. ${q.q}`;
-      optionsEl.innerHTML = "";
-      q.options.forEach((opt, i) => {
-        const btn = document.createElement("button");
-        btn.innerText = opt;
-        btn.style.display = "block";
-        btn.style.margin = "5px 0";
-        btn.onclick = () => selectAnswer(index, String.fromCharCode(65 + i));
-        optionsEl.appendChild(btn);
-      });
-      updateActive(index);
-    }
-
-    function selectAnswer(index, option) {
-      document.querySelectorAll(".palette button")[index].style.backgroundColor = "#28a745";
-    }
-
-    function updateActive(index) {
-      document.querySelectorAll(".palette button").forEach((btn, i) => {
-        btn.classList.toggle("active", i === index);
-      });
-    }
-
-    questions.forEach((_, i) => {
-      const btn = document.createElement("button");
-      btn.innerText = i + 1;
-      btn.onclick = () => showQuestion(i);
-      buttonsDiv.appendChild(btn);
+    const quizContainer = document.getElementById("quiz");
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.classList.add("question-block");
+      div.innerHTML = `
+        <p class="question">${i + 1}. ${q.q}</p>
+        <div class="options">
+          ${q.options.map((opt, idx) => `
+            <label><input type="radio" name="q${i}" value="${String.fromCharCode(65+idx)}" /> ${opt}</label>
+          `).join("")}
+        </div>
+      `;
+      quizContainer.appendChild(div);
     });
 
-    showQuestion(0);
-
-    // ⏱ Timer Logic
-    let time = 20 * 60;
-    const display = document.getElementById("time");
-
-    function startTimer() {
-      const interval = setInterval(() => {
-        const minutes = Math.floor(time / 60);
-        const seconds = time % 60;
-        display.innerText = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-        time--;
-        if (time < 0) {
-          clearInterval(interval);
-          alert("Time's up!");
-        }
-      }, 1000);
-    }
-
-    startTimer();
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      clearInterval(timer);
+      let score = 0;
+      const result = document.getElementById("result");
+      result.innerHTML = "";
+      questions.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const selectedVal = selected ? selected.value : "None";
+        const correct = q.answer;
+        const isCorrect = selectedVal === correct;
+        const colorClass = isCorrect ? "correct" : "wrong";
+        if (isCorrect) score++;
+        result.innerHTML += `<p class="${colorClass}">${i + 1}. तुमचं उत्तर: ${selectedVal || "निवडलं नाही"} | बरोबर उत्तर: ${correct}</p>`;
+      });
+      result.innerHTML += `<p><strong>Final Score: ${score} / ${questions.length}</strong></p>`;
+    });
   </script>
 </body>
 </html>
