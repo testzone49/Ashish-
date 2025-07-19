@@ -1,88 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TestZone CBT - 20Q</title>
+  <meta charset="UTF-8">
+  <title>TestZone – Daily Practice</title>
   <style>
-    body { font-family: Arial; background: #f0f0f0; margin: 0; padding: 0; }
-    .container { max-width: 800px; margin: auto; background: white; padding: 20px; box-shadow: 0 0 10px #aaa; margin-top: 30px; }
-    .question { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-    .options input { margin-right: 10px; }
-    .correct { background-color: #d4edda; }
-    .wrong { background-color: #f8d7da; }
-    #submit { background: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-    #submit:hover { background: #218838; }
-    #summary { margin-top: 30px; padding: 10px; background: #e9ecef; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f3f4f6;
+    }
+    h1 {
+      color: #2d3748;
+    }
+    .question {
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .option {
+      display: block;
+      margin: 5px 0;
+    }
+    .correct {
+      background-color: #d4edda;
+    }
+    .incorrect {
+      background-color: #f8d7da;
+    }
+    #submitBtn {
+      padding: 10px 20px;
+      background-color: #2b6cb0;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #submitBtn:hover {
+      background-color: #2c5282;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>TestZone - 20 Questions Practice</h2>
-    <form id="quizForm">
-      <div id="questions"></div>
-      <button type="submit" id="submit">Submit</button>
-    </form>
-    <div id="summary" style="display:none;"></div>
-  </div>
 
-  <script src="questions.js"></script>
-  <script>
-    const form = document.getElementById("quizForm");
-    const questionsContainer = document.getElementById("questions");
-    const summaryDiv = document.getElementById("summary");
+<h1>TestZone – Daily Practice</h1>
 
-    const url = "https://script.google.com/macros/s/AKfycbxfTqfxMgU9kmsV4V0AsBZ3L6Om4QHVyIWYNaGyWRCVDIvlmygpgJvh5dWOWKWt90wk/exec";
+<form id="quizForm">
+  <!-- Questions start -->
+</form>
 
-    const user = prompt("Enter your name (ashish, akshay, etc):", "ashish");
+<button id="submitBtn">Submit</button>
 
-    function renderQuestions() {
-      questions.forEach((q, i) => {
-        const div = document.createElement("div");
-        div.className = "question";
-        div.id = "qbox" + i;
-        div.innerHTML = \`<strong>Q\${i + 1}:</strong> \${q.q} <br>
-          <div class="options">
-            \${q.options.map((opt, j) =>
-              \`<label><input type="radio" name="q\${i}" value="\${String.fromCharCode(65 + j)}"> \${opt}</label><br>\`).join('')}
-          </div>\`;
-        questionsContainer.appendChild(div);
-      });
+<div id="result"></div>
+
+<script>
+const questions = [
+  {
+    q: "What is the square root of 2025?",
+    options: ["45", "40", "50", "55"],
+    answer: "A"
+  },
+  {
+    q: "Which of the following numbers is a prime number?",
+    options: ["87", "97", "91", "93"],
+    answer: "B"
+  },
+  {
+    q: "If 5x – 3 = 2x + 12, what is the value of x?",
+    options: ["5", "6", "4", "3"],
+    answer: "A"
+  },
+  {
+    q: "What is the synonym of the word 'Abandon'?",
+    options: ["Accept", "Leave", "Change", "Follow"],
+    answer: "B"
+  },
+  {
+    q: "Arrange the words in a meaningful order: College, School, Job, Admission",
+    options: ["2-1-4-3", "4-2-1-3", "2-4-1-3", "1-2-4-3"],
+    answer: "C"
+  },
+  {
+    q: "The next number in the series: 2, 4, 8, 16, ?",
+    options: ["24", "30", "32", "36"],
+    answer: "C"
+  },
+  {
+    q: "Which of the following is not a programming language?",
+    options: ["Python", "Java", "HTML", "SQL"],
+    answer: "C"
+  },
+  {
+    q: "Who is the current Chief Justice of India? (As of July 2025)",
+    options: ["U.U. Lalit", "D.Y. Chandrachud", "N.V. Ramana", "Sharad Bobde"],
+    answer: "B"
+  },
+  {
+    q: "One morning Ashish said “30 mins ago, it was three times as many minutes past 3.” What is the time now?",
+    options: ["3:33", "3:36", "3:30", "3:45"],
+    answer: "A"
+  },
+  {
+    q: "What is the LCM of 12, 15 and 20?",
+    options: ["120", "60", "240", "180"],
+    answer: "A"
+  },
+  {
+    q: "If 'A'=1, 'Z'=26, sum of letters in “CHAT”?",
+    options: ["40", "38", "43", "36"],
+    answer: "C"
+  },
+  {
+    q: "What is the capital of Argentina?",
+    options: ["Santiago", "Rio de Janeiro", "Buenos Aires", "Lima"],
+    answer: "C"
+  },
+  {
+    q: "Which is the largest bone in the human body?",
+    options: ["Femur", "Tibia", "Spine", "Radius"],
+    answer: "A"
+  },
+  {
+    q: "Complete the analogy: Pen : Write :: Knife : ?",
+    options: ["Paint", "Cut", "Cook", "Shape"],
+    answer: "B"
+  },
+  {
+    q: "Battle of Plassey happened in –",
+    options: ["1757", "1857", "1761", "1782"],
+    answer: "A"
+  },
+  {
+    q: "Boat covers 36 km downstream in 2 hr, upstream in 3 hr. Speed in still water?",
+    options: ["10", "12", "15", "18"],
+    answer: "B"
+  },
+  {
+    q: "Father:Son = 5:2, after 10 years = 3:2. What is father's age?",
+    options: ["40", "45", "50", "60"],
+    answer: "C"
+  },
+  {
+    q: "Which article deals with Right to Education?",
+    options: ["Art 14", "Art 21A", "Art 15", "Art 19"],
+    answer: "B"
+  },
+  {
+    q: "What is antonym of 'Obvious'?",
+    options: ["Vague", "Clear", "Apparent", "Evident"],
+    answer: "A"
+  },
+  {
+    q: "How many squares in 5x5 grid?",
+    options: ["25", "55", "30", "50"],
+    answer: "B"
+  }
+];
+
+const form = document.getElementById('quizForm');
+
+questions.forEach((q, i) => {
+  const div = document.createElement('div');
+  div.className = "question";
+  div.innerHTML = `<p><strong>Q${i + 1}. ${q.q}</strong></p>`;
+  q.options.forEach((opt, j) => {
+    const optLabel = String.fromCharCode(65 + j);
+    div.innerHTML += `
+      <label class="option">
+        <input type="radio" name="q${i}" value="${optLabel}"> ${optLabel}) ${opt}
+      </label>
+    `;
+  });
+  form.appendChild(div);
+});
+
+document.getElementById('submitBtn').addEventListener('click', () => {
+  let score = 0;
+
+  questions.forEach((q, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    const options = document.getElementsByName(`q${i}`);
+    options.forEach((opt, j) => {
+      const parent = opt.parentElement;
+      parent.classList.remove('correct', 'incorrect');
+      if (String.fromCharCode(65 + j) === q.answer) {
+        parent.classList.add('correct');
+      }
+    });
+    if (selected && selected.value === q.answer) {
+      score++;
+    } else if (selected) {
+      selected.parentElement.classList.add('incorrect');
     }
+  });
 
-    form.onsubmit = function(e) {
-      e.preventDefault();
-      let correct = 0, wrong = 0, skipped = 0;
-      questions.forEach((q, i) => {
-        const radios = form["q" + i];
-        const selected = [...radios].find(r => r.checked);
-        const qbox = document.getElementById("qbox" + i);
+  document.getElementById('result').innerText = `✅ You scored ${score} out of ${questions.length}`;
+});
+</script>
 
-        if (!selected) {
-          skipped++;
-          return;
-        }
-        if (selected.value === q.answer) {
-          correct++;
-          qbox.classList.add("correct");
-        } else {
-          wrong++;
-          qbox.classList.add("wrong");
-        }
-      });
-
-      const score = \`\${correct}/\${questions.length}\`;
-      summaryDiv.style.display = "block";
-      summaryDiv.innerHTML = \`✅ Correct: \${correct}<br>❌ Wrong: \${wrong}<br>⏭️ Skipped: \${skipped}<br>🏁 Score: \${score}\`;
-
-      fetch(url, {
-        method: "POST",
-        body: JSON.stringify({ name: user, score, correct, wrong, skipped }),
-        headers: { "Content-Type": "application/json" }
-      }).then(r => r.text()).then(console.log);
-    }
-
-    renderQuestions();
-  </script>
 </body>
 </html>
