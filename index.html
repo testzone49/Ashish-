@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>JAA Day 1 Practice Test</title>
+  <title>JAA Day 3 – Mixed Level</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
     .question-block {
       background: #fff; padding: 15px; margin-bottom: 10px;
       border-radius: 8px; box-shadow: 0 0 4px #ccc;
@@ -23,48 +23,37 @@
   </style>
 </head>
 <body>
-
-<h2>JAA Day 1 – Practice Test (25 Questions)</h2>
+<h2>JAA Day 3 – Mixed Level Practice Test (25 Questions)</h2>
 <form id='quizForm'></form>
 <button id="submitBtn">Submit</button>
 <div id="result"></div>
-
 <script>
 const questions = [
-  // LANGUAGE
-  ["Choose the correct spelling:", ["Accomodation", "Accommodation", "Acommodation", "Acommadation"], "B"],
-  ["Synonym of 'Happy':", ["Sad", "Excited", "Joyful", "Angry"], "C"],
-  ["Fill in the blank: She ___ to the market yesterday.", ["go", "went", "gone", "going"], "B"],
-  ["Correct article: He is ___ honest man.", ["a", "an", "the", "no article"], "B"],
-  ["Antonym of 'Strong':", ["Weak", "Powerful", "Sturdy", "Solid"], "A"],
-  
-  // MATHS
-  ["What is 12 + 15?", ["27", "25", "26", "28"], "A"],
-  ["Value of 5²?", ["10", "20", "25", "15"], "C"],
-  ["LCM of 4 and 6?", ["12", "6", "8", "10"], "A"],
-  ["Find missing: 3,6,9,__ ,15", ["10", "11", "12", "13"], "C"],
-  ["Square root of 49?", ["5", "6", "7", "8"], "C"],
-  
-  // GK
-  ["President of India (2024)?", ["Droupadi Murmu", "Narendra Modi", "Kovind", "Amit Shah"], "A"],
-  ["National Animal?", ["Lion", "Tiger", "Elephant", "Peacock"], "B"],
-  ["Capital of Maharashtra?", ["Pune", "Mumbai", "Nagpur", "Nashik"], "B"],
-  ["Longest river in India?", ["Ganga", "Yamuna", "Krishna", "Godavari"], "A"],
-  ["Currency of Japan?", ["Yuan", "Dollar", "Yen", "Won"], "C"],
-  
-  // REASONING
-  ["Next in series: 2, 4, 8, 16, ?", ["18", "24", "30", "32"], "D"],
-  ["Odd one: Apple, Banana, Carrot, Mango", ["Apple", "Banana", "Carrot", "Mango"], "C"],
-  ["If A=1, B=2, then Z=?", ["24", "25", "26", "27"], "C"],
-  ["Which is different: 3, 5, 7, 9", ["3", "5", "7", "9"], "D"],
-  ["Cube of 3 is:", ["9", "6", "27", "18"], "C"],
-  
-  // COMPUTER
-  ["CPU full form?", ["Central Process Unit", "Control Unit", "Central Processing Unit", "Personal Unit"], "C"],
-  ["Shortcut to copy?", ["Ctrl+V", "Ctrl+C", "Ctrl+X", "Ctrl+Z"], "B"],
-  ["Not an input device?", ["Mouse", "Keyboard", "Monitor", "Scanner"], "C"],
-  ["Excel file extension?", [".docx", ".xlsx", ".ppt", ".jpg"], "B"],
-  ["RAM stands for?", ["Read Access Memory", "Random Access Memory", "Run Memory", "Read Active Memory"], "B"]
+["Identify the correct passive voice: 'She writes a letter.'", ["A letter is written by her.", "A letter was written by her.", "A letter has written by her.", "A letter is being written by her."], "A"],
+["Synonym of 'Brief':", ["Short", "Big", "Long", "Slow"], "A"],
+["Choose the correct sentence:", ["He go to school everyday.", "He goes to school everyday.", "He going to school everyday.", "He gone to school everyday."], "B"],
+["Which word is a noun?", ["Run", "Blue", "Happiness", "Quick"], "C"],
+["Antonym of 'Active':", ["Lazy", "Fast", "Quick", "Alive"], "A"],
+["Find the simple interest on ₹5000 at 5% for 2 years:", ["₹500", "₹400", "₹550", "₹450"], "A"],
+["Solve: 15 + 6 ÷ 3 × 2 =", ["19", "17", "21", "18"], "B"],
+["LCM of 9, 12, and 15:", ["90", "60", "180", "120"], "B"],
+["Square of 13 is:", ["159", "169", "179", "189"], "B"],
+["The average of 5, 10, 15, 20, 25 is:", ["12", "15", "17", "18"], "B"],
+["Who wrote the National Anthem?", ["Rabindranath Tagore", "Bankim Chandra", "Subhash Chandra Bose", "Gandhiji"], "A"],
+["How many players are there in a cricket team?", ["10", "11", "12", "9"], "B"],
+["Capital of Australia?", ["Canberra", "Sydney", "Melbourne", "Perth"], "A"],
+["Which is the largest ocean?", ["Atlantic", "Indian", "Pacific", "Arctic"], "C"],
+["Currency of USA?", ["Euro", "Pound", "Dollar", "Ruble"], "C"],
+["Find odd one: 2, 3, 5, 8, 11", ["2", "5", "8", "11"], "C"],
+["What comes next: 5, 10, 20, 40, ?", ["45", "50", "80", "70"], "C"],
+["If CAT = 24, DOG = ?", ["26", "28", "30", "32"], "B"],
+["Mirror image of 'K' looks like?", ["K", "<", "X", "Z"], "A"],
+["Coding: If A=1, B=2, what is code for ACE?", ["9", "6", "7", "8"], "A"],
+["Which is output device?", ["Mouse", "Scanner", "Monitor", "Keyboard"], "C"],
+["What does HTML stand for?", ["HyperText Markup Language", "HighText Machine Language", "HyperTool Marking Language", "Hyper Terminal Multi Language"], "A"],
+["Which one is an email service?", ["Google", "Gmail", "GitHub", "Chrome"], "B"],
+["CTRL + Z is used to:", ["Redo", "Copy", "Undo", "Cut"], "C"],
+["Which of these stores data permanently?", ["RAM", "ROM", "Cache", "Register"], "B"]
 ];
 
 const form = document.getElementById('quizForm');
