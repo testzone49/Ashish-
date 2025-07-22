@@ -2,18 +2,18 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>JAA Day 4 – Basic + Mixed Intermediate</title>
+  <title>JAA Day 5 – Intermediate Level</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #eef1f4; }
+    body { font-family: sans-serif; padding: 20px; background: #f1f5f9; }
     .question-block {
       background: #fff; padding: 15px; margin-bottom: 10px;
-      border-radius: 8px; box-shadow: 0 0 4px #bbb;
+      border-radius: 10px; box-shadow: 0 0 6px #ccc;
     }
     .option { display: block; margin: 5px 0; }
     .correct { background-color: #d4edda; }
     .incorrect { background-color: #f8d7da; }
     #submitBtn {
-      padding: 10px 20px; font-size: 16px;
+      padding: 10px 25px; font-size: 16px;
       background: #007bff; color: white;
       border: none; border-radius: 5px;
     }
@@ -23,37 +23,37 @@
   </style>
 </head>
 <body>
-<h2>JAA Day 4 – Basic + Mixed Intermediate Practice Test (25 Questions)</h2>
+<h2>JAA Day 5 – Intermediate Level Practice Test (25 Questions)</h2>
 <form id='quizForm'></form>
 <button id="submitBtn">Submit</button>
 <div id="result"></div>
 <script>
 const questions = [
-["Choose the correct plural of 'Child':", ["Childs", "Children", "Childes", "Childrens"], "B"],
-["Synonym of 'Begin':", ["End", "Finish", "Start", "Close"], "C"],
-["Antonym of 'Cold':", ["Chilly", "Hot", "Warm", "Ice"], "B"],
-["Choose the correct spelling:", ["Enviroment", "Environment", "Enviranment", "Enveronment"], "B"],
-["Pick the verb: 'He quickly ran to the store.'", ["He", "Quickly", "Ran", "Store"], "C"],
-["What is 12 × 8?", ["96", "86", "108", "92"], "A"],
-["What is the square root of 81?", ["7", "8", "9", "6"], "C"],
-["Simplify: 24 ÷ 3 + 4 × 2", ["16", "14", "12", "20"], "B"],
-["20% of 150 is:", ["25", "30", "35", "20"], "B"],
-["What is the perimeter of square with side 7cm?", ["14cm", "28cm", "21cm", "30cm"], "B"],
-["Who is the Father of the Nation (India)?", ["Jawaharlal Nehru", "Mahatma Gandhi", "B. R. Ambedkar", "Subhash Chandra Bose"], "B"],
-["Which gas do plants absorb?", ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], "C"],
-["Which is the national bird of India?", ["Peacock", "Swan", "Parrot", "Crow"], "A"],
-["What is the capital of Maharashtra?", ["Mumbai", "Pune", "Nagpur", "Nashik"], "A"],
-["Which festival is known as festival of lights?", ["Holi", "Diwali", "Eid", "Christmas"], "B"],
-["What comes next: 3, 6, 9, 12, ?", ["14", "15", "18", "13"], "B"],
-["Odd one out: Apple, Banana, Carrot, Mango", ["Apple", "Banana", "Carrot", "Mango"], "C"],
-["If 2 + 3 = 10, 3 + 4 = 21, then 4 + 5 = ?", ["30", "32", "36", "29"], "C"],
-["Which is different: Square, Circle, Triangle, Rectangle", ["Square", "Circle", "Triangle", "Rectangle"], "B"],
-["Mirror image of 'E' looks like?", ["E", "3", "W", "F"], "B"],
-["Shortcut key to copy:", ["Ctrl + C", "Ctrl + V", "Ctrl + X", "Ctrl + Z"], "A"],
-["Which is a storage device?", ["CPU", "Monitor", "Pen Drive", "Mouse"], "C"],
-["What is the full form of CPU?", ["Central Process Unit", "Control Panel Unit", "Central Processing Unit", "Central Performance Unit"], "C"],
-["Which of these is not an input device?", ["Keyboard", "Mouse", "Monitor", "Scanner"], "C"],
-["Which app is used to browse the internet?", ["Paint", "MS Word", "Chrome", "Excel"], "C"]
+["Which one is a prime number?", ["22", "27", "31", "33"], "C"],
+["What is the cube root of 64?", ["3", "4", "5", "6"], "B"],
+["Which word is the antonym of 'Transparent'?", ["Clear", "Vague", "Opaque", "Translucent"], "C"],
+["Who wrote 'Discovery of India'?", ["Gandhiji", "Nehru", "Ambedkar", "Tilak"], "B"],
+["What is 15% of 300?", ["30", "35", "40", "45"], "D"],
+["What is HCF of 36 and 60?", ["6", "12", "18", "24"], "B"],
+["Which Article provides Right to Equality?", ["Article 14", "Article 21", "Article 19", "Article 17"], "A"],
+["Which layer of OSI deals with routing?", ["Data Link", "Network", "Transport", "Session"], "B"],
+["If TRAIN is coded as WUDLQ, how is BRAIN coded?", ["EXDLQ", "EQDLQ", "ERDLQ", "EUDLQ"], "D"],
+["Which is not a type of printer?", ["Laser", "Inkjet", "LED", "Compiler"], "D"],
+["What is the sum of first 10 natural numbers?", ["45", "50", "55", "60"], "C"],
+["Antonym of 'Conclude':", ["Finish", "Start", "End", "Complete"], "B"],
+["Average of 10, 20, 30, 40, 50 is:", ["25", "30", "35", "40"], "B"],
+["Find missing number: 2, 6, 12, 20, ?", ["30", "28", "32", "34"], "B"],
+["Who discovered Penicillin?", ["Newton", "Fleming", "Einstein", "Faraday"], "B"],
+["Which one is a web browser?", ["Google", "YouTube", "Chrome", "Gmail"], "C"],
+["Which Indian state has highest area?", ["UP", "MP", "Rajasthan", "Maharashtra"], "C"],
+["What is 3/4 of 64?", ["42", "46", "48", "52"], "C"],
+["One byte = how many bits?", ["4", "8", "16", "32"], "B"],
+["If A=1, Z=26, then AZ = ?", ["27", "52", "25", "28"], "B"],
+["Which city is called Pink City?", ["Mumbai", "Delhi", "Jaipur", "Pune"], "C"],
+["Full form of HTTP?", ["Hyper Transfer Text Protocol", "HyperText Transfer Protocol", "HighText Transfer Protocol", "HyperText Transition Protocol"], "B"],
+["Synonym of 'Error':", ["Success", "Mistake", "Result", "Try"], "B"],
+["Which vitamin is received from sunlight?", ["A", "B", "C", "D"], "D"],
+["Solve: (8 + 2) × (6 - 4)", ["20", "18", "16", "24"], "A"]
 ];
 
 const form = document.getElementById('quizForm');
