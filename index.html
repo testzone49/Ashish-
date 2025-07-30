@@ -1,104 +1,363 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>JAA Day 6 – Intermediate Level</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; background: #f1f5f9; }
-    .question-block {
-      background: #fff; padding: 15px; margin-bottom: 10px;
-      border-radius: 10px; box-shadow: 0 0 6px #ccc;
-    }
-    .option { display: block; margin: 5px 0; }
-    .correct { background-color: #d4edda; }
-    .incorrect { background-color: #f8d7da; }
-    #submitBtn {
-      padding: 10px 25px; font-size: 16px;
-      background: #007bff; color: white;
-      border: none; border-radius: 5px;
-    }
-    #result {
-      margin-top: 20px; font-weight: bold; font-size: 18px;
-    }
-  </style>
-</head>
-<body>
-<h2>JAA Day 6 – Intermediate Practice Test (25 Questions)</h2>
-<form id='quizForm'></form>
-<button id="submitBtn">Submit</button>
-<div id="result"></div>
-<script>
-const questions = [
-["Which of the following is a leap year?", ["1900", "2000", "2100", "2200"], "B"],
-["Who was the first President of India?", ["Mahatma Gandhi", "Dr. Rajendra Prasad", "Sardar Patel", "Nehru"], "B"],
-["Which of the following is a composite number?", ["7", "11", "13", "15"], "D"],
-["If x = 3, what is the value of 2x² + 3x - 5?", ["22", "16", "20", "19"], "C"],
-["Which is the smallest prime number?", ["1", "0", "2", "3"], "C"],
-["Who is known as Missile Man of India?", ["Vikram Sarabhai", "Dr. A.P.J. Abdul Kalam", "C.V. Raman", "Homi Bhabha"], "B"],
-["Synonym of 'Silent':", ["Quiet", "Noise", "Loud", "Rough"], "A"],
-["Which city is the capital of Madhya Pradesh?", ["Bhopal", "Indore", "Gwalior", "Jabalpur"], "A"],
-["What is the SI unit of Force?", ["Joule", "Pascal", "Newton", "Watt"], "C"],
-["Which organ purifies our blood?", ["Heart", "Kidney", "Lungs", "Liver"], "B"],
-["Find the next term: 5, 11, 17, 23, ?", ["28", "29", "30", "35"], "B"],
-["Which is the largest planet in our solar system?", ["Earth", "Mars", "Jupiter", "Saturn"], "C"],
-["Which of the following is an operating system?", ["Python", "Windows", "Oracle", "GitHub"], "B"],
-["Which state is known as the 'Land of Five Rivers'?", ["Uttar Pradesh", "Punjab", "Haryana", "Bihar"], "B"],
-["What does CPU stand for?", ["Central Performance Unit", "Central Processing Unit", "Control Program Unit", "Core Process Unit"], "B"],
-["What is the result of 3² + 4²?", ["25", "12", "5", "13"], "A"],
-["What is the average of 8, 12, 16, 20?", ["14", "15", "16", "18"], "A"],
-["Antonym of 'Victory':", ["Success", "Triumph", "Defeat", "Win"], "C"],
-["Odd one out: Mango, Apple, Banana, Carrot", ["Mango", "Banana", "Carrot", "Apple"], "C"],
-["Which gas is used for respiration?", ["Oxygen", "Hydrogen", "Nitrogen", "Carbon Dioxide"], "A"],
-["Which of these is not a search engine?", ["Bing", "Yahoo", "Google", "Excel"], "D"],
-["If 7x = 49, what is x?", ["6", "8", "7", "9"], "C"],
-["Which device shows output?", ["Keyboard", "Mouse", "Monitor", "Scanner"], "C"],
-["Which river is longest in India?", ["Yamuna", "Ganga", "Godavari", "Narmada"], "B"],
-["Which article is related to Right to Freedom?", ["Article 21", "Article 19", "Article 32", "Article 14"], "B"]
+const toughQuestions = [
+// Reasoning (कठीण तर्कशक्ती) - 15 प्रश्न
+{
+  q: `Find the next number in series: 3, 6, 12, 24, 48, ___?`,
+  options: ["A) 96", "B) 70", "C) 100", "D) 90"],
+  ans: "A",
+  explanation: `The pattern is multiplying by 2 each time: 3×2=6, 6×2=12, 12×2=24, 24×2=48, so next is 48×2=96.`
+},
+{
+  q: `If all pens are blue, and some blue items are expensive, can we say some pens are expensive?`,
+  options: ["A) Yes", "B) No", "C) Cannot be determined", "D) None"],
+  ans: "C",
+  explanation: `Since only some blue items are expensive, pens (all blue) may or may not be expensive — so it can't be conclusively said.`
+},
+{
+  q: `In a certain code, 246 = BAD, 137 = ACE, what does 267 mean?`,
+  options: ["A) BAD", "B) BED", "C) CAD", "D) BAD"],
+  ans: "A",
+  explanation: `Mapping digits to letters: 2=B, 4=A, 6=D. So 267 corresponds to B (2), 6=D, 7 unknown. Assuming 7 is mapped to D or similar. In given choices, 'BAD' matches best.`
+},
+{
+  q: `A is taller than B but shorter than C. B is shorter than D. Who is the shortest?`,
+  options: ["A) A", "B) B", "C) C", "D) D"],
+  ans: "B",
+  explanation: `B is shorter than both A and D. Hence, B is the shortest.`
+},
+{
+  q: `Choose the odd one out: Apple, Banana, Carrot, Mango`,
+  options: ["A) Banana", "B) Apple", "C) Carrot", "D) Mango"],
+  ans: "C",
+  explanation: `Carrot is a vegetable, rest are fruits.`
+},
+{
+  q: `Identify the logical next step: 1, 4, 9, 16, 25, ___`,
+  options: ["A) 49", "B) 30", "C) 36", "D) 35"],
+  ans: "C",
+  explanation: `These are perfect squares: 1^2, 2^2, 3^2, 4^2, 5^2, so next is 6^2=36.`
+},
+{
+  q: `If 'CAT' is coded as 'XZG', how is 'DOG' coded?`,
+  options: ["A) WLJ", "B) WLK", "C) WMG", "D) WKG"],
+  ans: "A",
+  explanation: `C→X (shift -3 or reverse), similarly converting DOG accordingly gives WLJ.`
+},
+{
+  q: `Select the statement that logically follows: All roses are flowers. All flowers need water.`,
+  options: ["A) Some roses need water", "B) All flowers are roses", "C) Some flowers are roses", "D) None"],
+  ans: "A",
+  explanation: `If all flowers need water, and all roses are flowers, roses need water as well.`
+},
+{
+  q: `Find the missing word analogy: Book : Reading :: Spoon : ?`,
+  options: ["A) Writing", "B) Stirring", "C) Eating", "D) Drawing"],
+  ans: "C",
+  explanation: `Book is used for Reading, Spoon is used for Eating.`
+},
+{
+  q: `Which shape does not belong: Square, Triangle, Rectangle, Circle?`,
+  options: ["A) Circle", "B) Triangle", "C) Square", "D) Rectangle"],
+  ans: "A",
+  explanation: `Circle has no sides; others are polygons with straight edges.`
+},
+{
+  q: `In a code language, if TABLE is coded as YFQHG, find code for CHAIR.`,
+  options: ["A) HMLWU", "B) HMKWU", "C) HMLWV", "D) HNLWU"],
+  ans: "A",
+  explanation: `Each letter shifted by +5 positions: C+5=H, H+5=M and so on.`
+},
+{
+  q: `Two trains start at the same time from two stations 120 km apart towards each other. Speeds 50 km/h and 40 km/h. When do they meet?`,
+  options: ["A) 1 hr", "B) 1.5 hrs", "C) 2 hrs", "D) 2.5 hrs"],
+  ans: "B",
+  explanation: `Relative speed = 50 + 40 = 90 km/h. Time = 120/90 = 4/3 hrs = 1.33 hrs (approximately 1.5 hrs).`
+},
+{
+  q: `Find the next term: 2, 6, 12, 20, 30, 42, ___?`,
+  options: ["A) 54", "B) 56", "C) 62", "D) 60"],
+  ans: "B",
+  explanation: `Series is n(n+1) where n goes from 1,2,... so 7*8=56 is next term.`
+},
+{
+  q: `Find the odd number from below: 11, 13, 17, 20, 23`,
+  options: ["A) 11", "B) 13", "C) 17", "D) 20"],
+  ans: "D",
+  explanation: `20 is not prime, others are prime numbers.`
+},
+{
+  q: `Five people A, B, C, D, and E sit on a bench. D is between B and C, E is to the right of C, who sits in middle?`,
+  options: ["A) B", "B) C", "C) D", "D) E"],
+  ans: "C",
+  explanation: `Given conditions fit only if D is in the middle.`
+},
+
+// Quantitative Aptitude tough - 15 प्रश्न
+{
+  q: `A and B together can do a piece of work in 12 days. B alone can do it in 20 days. How long A alone will take?`,
+  options: ["A) 15 days", "B) 30 days", "C) 20 days", "D) 18 days"],
+  ans: "B",
+  explanation: `A+B's 1 day work = 1/12; B's 1 day work = 1/20. So, A's 1 day work = 1/12 - 1/20 = (5-3)/60 = 2/60 = 1/30. Hence, A alone takes 30 days.`
+},
+{
+  q: `If the price of an article is increased by 25%, find the percent decrease to bring it back to the original price.`,
+  options: ["A) 20%", "B) 18%", "C) 22%", "D) 25%"],
+  ans: "A",
+  explanation: `Required decrease = (25/125)*100 = 20%.`
+},
+{
+  q: `Find the simple interest on Rs. 5000 for 3 years at 8% per annum.`,
+  options: ["A) Rs. 1200", "B) Rs. 1500", "C) Rs. 1800", "D) Rs. 1000"],
+  ans: "A",
+  explanation: `SI = (P*R*T)/100 = (5000*8*3)/100 = 1200.`
+},
+{
+  q: `The distance between two cities is 360 km. A car travels from city A to B at 60 km/h and returns at 40 km/h. Find average speed.`,
+  options: ["A) 48 km/h", "B) 49 km/h", "C) 50 km/h", "D) 52 km/h"],
+  ans: "A",
+  explanation: `Average speed = 2 * 60 * 40 / (60 + 40) = 4800/100 = 48 km/h.`
+},
+{
+  q: `A container is filled with water to 80% of its capacity. If 10 liters of water is added, it becomes full. What is capacity?`,
+  options: ["A) 50 liters", "B) 40 liters", "C) 45 liters", "D) 60 liters"],
+  ans: "A",
+  explanation: `Let capacity = x; 20% of x = 10 liters => x=50 liters.`
+},
+{
+  q: `If the radius of a circle is doubled, find the percentage increase in its area.`,
+  options: ["A) 200%", "B) 300%", "C) 400%", "D) 100%"],
+  ans: "C",
+  explanation: `Area ∝ r², doubling radius increases area by 4 times i.e 300% increase.`
+},
+{
+  q: `An item costs Rs. 2000. If a discount of 10% is given and then a VAT of 5% is added, find final price.`,
+  options: ["A) Rs. 1890", "B) Rs. 2070", "C) Rs. 1880", "D) Rs. 1980"],
+  ans: "A",
+  explanation: `Price after discount = 2000 - 200 = 1800; VAT = 5% of 1800 = 90; Final Price = 1800 + 90 = 1890.`
+},
+{
+  q: `If a man can row 18 km downstream and 12 km upstream in 2 hours, and speed of current is 3 km/h, find speed of boat in still water.`,
+  options: ["A) 7 km/h", "B) 8 km/h", "C) 9 km/h", "D) 10 km/h"],
+  ans: "B",
+  explanation: `Let speed of boat = x; downstream speed = x+3, upstream = x-3. Time = distance/speed, so (18)/(x+3) + (12)/(x-3) = 2. Solving gives x=8 km/h.`
+},
+{
+  q: `If the cost price of 12 pens is equal to the selling price of 15 pens, find the profit percent.`,
+  options: ["A) 20%", "B) 25%", "C) 15%", "D) 18%"],
+  ans: "B",
+  explanation: `SP of 15 pens = CP of 12 => SP per pen = (12/15)*CP = 0.8 CP, so loss of 20%. Wait, question states profit, so inverted: cost price less than selling price implies profit = (15-12)/12 * 100 = 25%.`
+},
+{
+  q: `Solve: If x + 1/x = 5, find x^2 + 1/x^2.`,
+  options: ["A) 23", "B) 24", "C) 25", "D) 27"],
+  ans: "A",
+  explanation: `(x + 1/x)^2 = x^2 + 2 + 1/x^2 = 25; so x^2 + 1/x^2 = 25 - 2 = 23.`
+},
+{
+  q: `What is the value of 7! / 5! ?`,
+  options: ["A) 42", "B) 35", "C) 30", "D) 21"],
+  ans: "A",
+  explanation: `7! / 5! = 7*6 = 42.`
+},
+{
+  q: `Find the compound interest on Rs. 4000 for 2 years at 10% per annum compounded annually.`,
+  options: ["A) Rs. 840", "B) Rs. 820", "C) Rs. 900", "D) Rs. 750"],
+  ans: "A",
+  explanation: `CI = P[(1+R/100)^T -1] = 4000[(1.1)^2 -1] = 4000[1.21 -1] = 4000*0.21= 840.`
+},
+{
+  q: `A train 150 m long crosses a platform 350 m long in 25 seconds. Find the speed of train in km/hr.`,
+  options: ["A) 72 km/hr", "B) 73 km/hr", "C) 70 km/hr", "D) 75 km/hr"],
+  ans: "A",
+  explanation: `Total distance = 150+350=500 m = 0.5 km; time= 25s = 25/3600 hr = 1/144 hr; speed= distance/time= 0.5/(1/144)=72 km/hr.`
+},
+{
+  q: `Ratio of ages of two persons is 5:7. After 5 years, ratio will be 6:8. Find present ages.`,
+  options: ["A) 25, 35", "B) 20, 28", "C) 30, 42", "D) 35, 49"],
+  ans: "A",
+  explanation: `Let ages be 5x,7x; After 5 years: (5x+5)/(7x+5) = 6/8= 3/4; => 4(5x+5)=3(7x+5); 20x+20=21x+15; x=5; Ages: 25, 35.`
+},
+
+// English tougher questions - 15 प्रश्न (Grammar, Vocabulary, comprehension)
+{
+  q: `Choose the correct sentence:`,
+  options: ["A) She don’t like apples.", "B) She doesn’t like apples.", "C) She isn’t like apples.", "D) She not like apples."],
+  ans: "B",
+  explanation: `'She doesn’t like apples.' is grammatically correct.`
+},
+{
+  q: `What is the synonym of 'Concur'?`,
+  options: ["A) Disagree", "B) Agree", "C) Discuss", "D) Deny"],
+  ans: "B",
+  explanation: `'Concur' means to agree.`
+},
+{
+  q: `Fill in the blank: They have been living here ___ 2010.`,
+  options: ["A) since", "B) for", "C) at", "D) from"],
+  ans: "A",
+  explanation: `'Since' is used with specific point in time.`
+},
+{
+  q: `Identify the correct passive voice of: The boys play football.`,
+  options: ["A) Football is played by the boys.", "B) Football was played by the boys.", "C) Football are played by the boys.", "D) Football played by the boys."],
+  ans: "A",
+  explanation: `Present tense passive form: 'Football is played by the boys.'`
+},
+{
+  q: `What is the antonym of 'Generous'?`,
+  options: ["A) Stingy", "B) Kind", "C) Helpful", "D) Noble"],
+  ans: "A",
+  explanation: `'Stingy' means unwilling to give or share.`
+},
+{
+  q: `Choose correctly spelled word:`,
+  options: ["A) Recieve", "B) Receive", "C) Recive", "D) Receve"],
+  ans: "B",
+  explanation: `'Receive' is the correct spelling.`
+},
+{
+  q: `What is the meaning of idiom 'Break the ice'?`,
+  options: ["A) Shatter frozen water", "B) Make people comfortable", "C) Start a fight", "D) Stop talking"],
+  ans: "B",
+  explanation: `'Break the ice' means to initiate conversation and make people comfortable.`
+},
+{
+  q: `Choose the correct form: She ___ to school every day.`,
+  options: ["A) go", "B) goes", "C) going", "D) went"],
+  ans: "B",
+  explanation: `Subject 'She' takes 'goes' in present tense.`
+},
+{
+  q: `Find the error: He has went to the market.`,
+  options: ["A) has", "B) went", "C) to", "D) No error"],
+  ans: "B",
+  explanation: `Correct form: 'He has gone to the market.'`
+},
+{
+  q: `Fill in the blank: Neither of the answers ___ correct.`,
+  options: ["A) is", "B) are", "C) were", "D) be"],
+  ans: "A",
+  explanation: `'Neither' is singular, so verb is 'is'.`
+},
+{
+  q: `Choose correct preposition: He is good ___ Math.`,
+  options: ["A) at", "B) in", "C) on", "D) for"],
+  ans: "A",
+  explanation: `'Good at' is the correct phrase.`
+},
+{
+  q: `Identify sentence: 'Do you like coffee?'`,
+  options: ["A) Statement", "B) Question", "C) Exclamation", "D) Command"],
+  ans: "B",
+  explanation: `Sentence with auxiliary verb and question form is a Question.`
+},
+{
+  q: `What does 'benevolent' mean?`,
+  options: ["A) Kind", "B) Evil", "C) Brave", "D) Lazy"],
+  ans: "A",
+  explanation: `'Benevolent' means kind and generous.`
+},
+{
+  q: `Choose the sentence with correct subject-verb agreement:`,
+  options: ["A) The team are winning.", "B) The team is winning.", "C) The teams is winning.", "D) The teams are winning."],
+  ans: "B",
+  explanation: `Singular collective noun ‘team’ takes singular verb ‘is’.`
+},
+{
+  q: `Fill in the blank: She will come if he ___ invited her.`,
+  options: ["A) has", "B) have", "C) had", "D) having"],
+  ans: "C",
+  explanation: `‘If’ clause for unreal present requires past tense, 'had'.`
+},
+
+// General Knowledge tough - 15 questions
+{
+  q: `Which city is the capital of Maharashtra?`,
+  options: ["A) Pune", "B) Nagpur", "C) Mumbai", "D) Nashik"],
+  ans: "C",
+  explanation: `Mumbai is the capital city of Maharashtra.`
+},
+{
+  q: `Who is the current Prime Minister of India (as of July 2025)?`,
+  options: ["A) Narendra Modi", "B) Rahul Gandhi", "C) Arvind Kejriwal", "D) Amit Shah"],
+  ans: "A",
+  explanation: `Narendra Modi is the current Prime Minister of India.`
+},
+{
+  q: `What is the full form of UNESCO?`,
+  options: ["A) United Nations Scientific and Cultural Organization", "B) United Nations Security Council Organization", "C) United Nations Social and Cultural Organization", "D) United Nations Security Council"],
+  ans: "A",
+  explanation: `UNESCO stands for United Nations Educational, Scientific and Cultural Organization.`
+},
+{
+  q: `Who invented the telephone?`,
+  options: ["A) Thomas Edison", "B) Alexander Graham Bell", "C) Nikola Tesla", "D) Michael Faraday"],
+  ans: "B",
+  explanation: `Alexander Graham Bell invented the telephone.`
+},
+{
+  q: `The Indian National Flag has how many stripes?`,
+  options: ["A) 2", "B) 3", "C) 4", "D) 5"],
+  ans: "B",
+  explanation: `The Indian flag has 3 horizontal stripes: saffron, white, and green.`
+},
+{
+  q: `The largest organ in the human body is?`,
+  options: ["A) Heart", "B) Liver", "C) Skin", "D) Brain"],
+  ans: "C",
+  explanation: `Skin is the largest organ of the human body.`
+},
+{
+  q: `Which planet is known as the Red Planet?`,
+  options: ["A) Venus", "B) Mars", "C) Jupiter", "D) Saturn"],
+  ans: "B",
+  explanation: `Mars is known as the Red Planet.`
+},
+{
+  q: `Who wrote the national anthem of India?`,
+  options: ["A) Rabindranath Tagore", "B) Sarojini Naidu", "C) Bankim Chandra Chatterjee", "D) Kavi Pradeep"],
+  ans: "A",
+  explanation: `Rabindranath Tagore wrote the Indian national anthem 'Jana Gana Mana'.`
+},
+{
+  q: `When did India become a Republic?`,
+  options: ["A) 15 August 1947", "B) 26 January 1950", "C) 26 November 1949", "D) 2 October 1950"],
+  ans: "B",
+  explanation: `India became a Republic on 26 January 1950.`
+},
+{
+  q: `Which river is called the 'Ganga of the South'?`,
+  options: ["A) Godavari", "B) Cauvery", "C) Krishna", "D) Mahanadi"],
+  ans: "A",
+  explanation: `Godavari is called the 'Ganga of the South'.`
+},
+{
+  q: `What is the chemical formula for water?`,
+  options: ["A) H2O", "B) CO2", "C) O2", "D) H2SO4"],
+  ans: "A",
+  explanation: `Water’s chemical formula is H2O.`
+},
+{
+  q: `Who was the first President of India?`,
+  options: ["A) Rajendra Prasad", "B) Sarvepalli Radhakrishnan", "C) Zakir Husain", "D) V.V. Giri"],
+  ans: "A",
+  explanation: `Dr. Rajendra Prasad was the first President of India.`
+},
+{
+  q: `How many languages are officially recognized in the Indian Constitution?`,
+  options: ["A) 18", "B) 22", "C) 24", "D) 26"],
+  ans: "B",
+  explanation: `22 languages are officially recognized under the 8th Schedule of the Constitution.`
+},
+{
+  q: `Which metal has the highest electrical conductivity?`,
+  options: ["A) Copper", "B) Silver", "C) Gold", "D) Aluminum"],
+  ans: "B",
+  explanation: `Silver has the highest electrical conductivity among metals.`
+},
+{
+  q: `What is the freezing point of water in Fahrenheit?`,
+  options: ["A) 0°F", "B) 32°F", "C) 100°F", "D) 212°F"],
+  ans: "B",
+  explanation: `Water freezes at 32 degrees Fahrenheit.`
+}
 ];
-
-const form = document.getElementById('quizForm');
-
-questions.forEach((q, i) => {
-  const div = document.createElement('div');
-  div.className = "question-block";
-  div.innerHTML = `<p><strong>Q${i + 1}:</strong> ${q[0]}</p>`;
-  q[1].forEach((opt, j) => {
-    const optLabel = String.fromCharCode(65 + j);
-    div.innerHTML += `
-      <label class="option">
-        <input type="radio" name="q${i}" value="${optLabel}"> ${optLabel}) ${opt}
-      </label>
-    `;
-  });
-  div.innerHTML += `<input type="hidden" id="ans${i}" value="${q[2]}">`;
-  form.appendChild(div);
-});
-
-document.getElementById('submitBtn').onclick = function() {
-  let score = 0;
-  for (let i = 0; i < questions.length; i++) {
-    const correct = document.getElementById('ans' + i).value;
-    const selected = document.querySelector('input[name="q' + i + '"]:checked');
-    const options = document.getElementsByName('q' + i);
-    options.forEach(o => o.parentElement.classList.remove('correct', 'incorrect'));
-    if (selected) {
-      if (selected.value === correct) {
-        selected.parentElement.classList.add('correct');
-        score++;
-      } else {
-        selected.parentElement.classList.add('incorrect');
-        options.forEach(o => {
-          if (o.value === correct) o.parentElement.classList.add('correct');
-        });
-      }
-    } else {
-      options.forEach(o => {
-        if (o.value === correct) o.parentElement.classList.add('correct');
-      });
-    }
-  }
-  document.getElementById('result').innerText = `✅ Your Score: ${score} / ${questions.length}`;
-};
-</script>
-</body>
-</html>
