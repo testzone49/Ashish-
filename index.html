@@ -60,11 +60,6 @@
             border-bottom-color: #1c64f2;
             color: #1c64f2;
         }
-        .time-left {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #374151;
-        }
         .question-panel {
             flex-grow: 1;
             padding: 1.5rem;
@@ -162,7 +157,7 @@
         }
         .summary-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 0.75rem;
             margin-top: 1rem;
         }
@@ -248,47 +243,24 @@
         <div class="left-panel">
             <div class="header">
                 <div class="tabs">
-                    <button class="tab-button active">COMPUTER PROFICIENCY...</button>
-                    <button class="tab-button">READING COMPREHENSIO...</button>
-                    <button class="tab-button">QUANTITATIVE APTITUD...</button>
-                    <button class="tab-button">GENERAL MENTAL ABILIT...</button>
-                    <button class="tab-button">GENERAL AWARENESS...</button>
+                    <button class="tab-button active" data-section="computer">COMPUTER PROFICIENCY</button>
+                    <button class="tab-button" data-section="math">QUANTITATIVE APTITUDE</button>
                 </div>
-                <div class="time-left">Time Left: 74:26</div>
             </div>
 
             <div class="question-panel">
                 <div class="question-status">
-                    <span>Question Type: MCQ</span>
+                    <span>प्रश्न प्रकार: MCQ</span>
                     <span>|</span>
-                    <span>Marks for correct answer: 1</span>
+                    <span>योग्य उत्तरासाठी गुण: 1</span>
                     <span>|</span>
-                    <span>Negative Marks: 0</span>
+                    <span>नकारात्मक गुण: 0</span>
                 </div>
                 <div class="question-text">
-                    <span id="question-text">प्रश्न १: EDVAC या शब्दाचा अर्थ काय आहे?</span>
+                    <span id="question-text"></span>
                 </div>
                 <div class="options-list" id="options-list">
-                    <label>
-                        <input type="radio" name="answer" value="option1">
-                        <span class="custom-radio"></span>
-                        <span class="option-text">इलेक्ट्रॉनिक डिस्क्रीट व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="answer" value="option2">
-                        <span class="custom-radio"></span>
-                        <span class="option-text">इलेक्ट्रॉनिक डिक्रीट व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="answer" value="option3">
-                        <span class="custom-radio"></span>
-                        <span class="option-text">इलेक्ट्रॉनिक डिस्क व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर</span>
-                    </label>
-                    <label>
-                        <input type="radio" name="answer" value="option4">
-                        <span class="custom-radio"></span>
-                        <span class="option-text">इलेक्ट्रॉनिक डाटा व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर</span>
-                    </label>
+                    <!-- प्रश्न आणि पर्याय येथे JavaScript द्वारे लोड केले जातील -->
                 </div>
             </div>
 
@@ -336,10 +308,7 @@
             <div class="choose-question mt-4">
                 <h3 class="font-bold text-gray-700">प्रश्न निवडा</h3>
                 <div class="question-grid" id="question-grid">
-                    <button class="question-number-button not-visited" data-id="1">1</button>
-                    <button class="question-number-button not-visited" data-id="2">2</button>
-                    <button class="question-number-button not-visited" data-id="3">3</button>
-                    <button class="question-number-button not-visited" data-id="4">4</button>
+                    <!-- प्रश्न क्रमांक येथे JavaScript द्वारे लोड केले जातील -->
                 </div>
             </div>
 
@@ -351,62 +320,109 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const questions = [
-                {
-                    id: 1,
-                    text: 'EDVAC या शब्दाचा अर्थ काय आहे?',
-                    options: [
-                        'इलेक्ट्रॉनिक डिस्क्रीट व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
-                        'इलेक्ट्रॉनिक डिक्रीट व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
-                        'इलेक्ट्रॉनिक डिस्क व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
-                        'इलेक्ट्रॉनिक डाटा व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर'
-                    ]
-                },
-                {
-                    id: 2,
-                    text: 'खालीलपैकी कोणता इनपुट डिव्हाइस नाही?',
-                    options: [
-                        'कीबोर्ड',
-                        'माऊस',
-                        'मॉनिटर',
-                        'जॉयस्टिक'
-                    ]
-                },
-                {
-                    id: 3,
-                    text: '1 किलोबाइट (KB) मध्ये किती बाइट्स असतात?',
-                    options: [
-                        '1000',
-                        '1024',
-                        '1048',
-                        '980'
-                    ]
-                },
-                {
-                    id: 4,
-                    text: 'एका वेबसाइटच्या पहिल्या पानाला काय म्हणतात?',
-                    options: [
-                        'मेन पेज',
-                        'होम पेज',
-                        'फर्स्ट पेज',
-                        'बॅनर्स'
-                    ]
-                }
-            ];
+            const sections = {
+                computer: [
+                    {
+                        id: 1,
+                        text: 'EDVAC या शब्दाचा अर्थ काय आहे?',
+                        options: [
+                            'इलेक्ट्रॉनिक डिस्क्रीट व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
+                            'इलेक्ट्रॉनिक डिक्रीट व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
+                            'इलेक्ट्रॉनिक डिस्क व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
+                            'इलेक्ट्रॉनिक डाटा व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर'
+                        ]
+                    },
+                    {
+                        id: 2,
+                        text: 'खालीलपैकी कोणता इनपुट डिव्हाइस नाही?',
+                        options: [
+                            'कीबोर्ड',
+                            'माऊस',
+                            'मॉनिटर',
+                            'जॉयस्टिक'
+                        ]
+                    },
+                    {
+                        id: 3,
+                        text: '1 किलोबाइट (KB) मध्ये किती बाइट्स असतात?',
+                        options: [
+                            '1000',
+                            '1024',
+                            '1048',
+                            '980'
+                        ]
+                    },
+                    {
+                        id: 4,
+                        text: 'एका वेबसाइटच्या पहिल्या पानाला काय म्हणतात?',
+                        options: [
+                            'मेन पेज',
+                            'होम पेज',
+                            'फर्स्ट पेज',
+                            'बॅनर्स'
+                        ]
+                    }
+                ],
+                math: [
+                    {
+                        id: 1,
+                        text: 'एका संख्येतून 15% कमी केल्यावर 255 मिळते, तर ती संख्या कोणती?',
+                        options: [
+                            '280',
+                            '300',
+                            '290',
+                            '275'
+                        ]
+                    },
+                    {
+                        id: 2,
+                        text: 'दोन संख्यांचे गुणोत्तर 3:5 आहे आणि त्यांची बेरीज 80 आहे, तर त्या संख्या कोणत्या?',
+                        options: [
+                            '30 आणि 50',
+                            '20 आणि 60',
+                            '40 आणि 40',
+                            '32 आणि 48'
+                        ]
+                    },
+                    {
+                        id: 3,
+                        text: 'जर एका व्यक्तीने 20% नफ्याने एक वस्तू ₹1200 ला विकली, तर त्या वस्तूची मूळ किंमत काय असेल?',
+                        options: [
+                            '₹1000',
+                            '₹960',
+                            '₹1080',
+                            '₹1100'
+                        ]
+                    },
+                    {
+                        id: 4,
+                        text: 'एका वर्तुळाची त्रिज्या 7 सेमी असल्यास, त्याचे क्षेत्रफळ किती असेल?',
+                        options: [
+                            '154 चौ.सेमी.',
+                            '49 चौ.सेमी.',
+                            '22 चौ.सेमी.',
+                            '44 चौ.सेमी.'
+                        ]
+                    }
+                ]
+            };
 
+            let currentSection = 'computer';
             let currentQuestionIndex = 0;
+
             const questionTextElement = document.getElementById('question-text');
             const optionsListElement = document.getElementById('options-list');
             const questionGridElement = document.getElementById('question-grid');
             const nextBtn = document.getElementById('next-btn');
             const prevBtn = document.getElementById('prev-btn');
+            const tabs = document.querySelectorAll('.tab-button');
 
-            function renderQuestion(index) {
-                const question = questions[index];
+            function renderQuestion(section, index) {
+                const question = sections[section][index];
                 if (!question) return;
 
                 questionTextElement.textContent = `प्रश्न ${question.id}: ${question.text}`;
-                optionsListElement.innerHTML = ''; // पर्याय साफ करा
+                optionsListElement.innerHTML = ''; 
                 question.options.forEach((option, i) => {
                     const label = document.createElement('label');
                     label.innerHTML = `
@@ -417,19 +433,19 @@
                     optionsListElement.appendChild(label);
                 });
 
-                // बटणांची स्थिती अपडेट करा
                 prevBtn.disabled = index === 0;
-                nextBtn.disabled = index === questions.length - 1;
+                nextBtn.disabled = index === sections[section].length - 1;
             }
 
-            function handleNavigation(direction) {
-                if (direction === 'next' && currentQuestionIndex < questions.length - 1) {
-                    currentQuestionIndex++;
-                } else if (direction === 'prev' && currentQuestionIndex > 0) {
-                    currentQuestionIndex--;
-                }
-                renderQuestion(currentQuestionIndex);
-                updateQuestionGrid();
+            function renderQuestionGrid(section) {
+                questionGridElement.innerHTML = '';
+                sections[section].forEach((q) => {
+                    const button = document.createElement('button');
+                    button.classList.add('question-number-button', 'not-visited');
+                    button.textContent = q.id;
+                    button.dataset.id = q.id;
+                    questionGridElement.appendChild(button);
+                });
             }
 
             function updateQuestionGrid() {
@@ -437,12 +453,34 @@
                 buttons.forEach(button => {
                     const questionId = parseInt(button.dataset.id);
                     if (questionId === currentQuestionIndex + 1) {
-                        button.classList.add('bg-blue-500', 'text-white'); // सक्रिय प्रश्नासाठी रंग बदला
+                        button.classList.add('bg-blue-500', 'text-white');
                     } else {
                         button.classList.remove('bg-blue-500', 'text-white');
                     }
                 });
             }
+
+            function handleNavigation(direction) {
+                if (direction === 'next' && currentQuestionIndex < sections[currentSection].length - 1) {
+                    currentQuestionIndex++;
+                } else if (direction === 'prev' && currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                }
+                renderQuestion(currentSection, currentQuestionIndex);
+                updateQuestionGrid();
+            }
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentSection = tab.dataset.section;
+                    currentQuestionIndex = 0;
+                    renderQuestion(currentSection, currentQuestionIndex);
+                    renderQuestionGrid(currentSection);
+                    updateQuestionGrid();
+                });
+            });
 
             nextBtn.addEventListener('click', () => handleNavigation('next'));
             prevBtn.addEventListener('click', () => handleNavigation('prev'));
@@ -452,13 +490,14 @@
                 if (button) {
                     const questionId = parseInt(button.dataset.id);
                     currentQuestionIndex = questionId - 1;
-                    renderQuestion(currentQuestionIndex);
+                    renderQuestion(currentSection, currentQuestionIndex);
                     updateQuestionGrid();
                 }
             });
 
-            // सुरुवातीला पहिला प्रश्न रेंडर करा
-            renderQuestion(currentQuestionIndex);
+            // सुरुवातीला पहिला विभाग आणि पहिला प्रश्न रेंडर करा
+            renderQuestion(currentSection, currentQuestionIndex);
+            renderQuestionGrid(currentSection);
             updateQuestionGrid();
         });
     </script>
