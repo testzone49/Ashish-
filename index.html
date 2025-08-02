@@ -1,506 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Interface</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-        }
-        .container {
-            display: flex;
-            min-height: 100vh;
-            background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 1rem;
-            overflow: hidden;
-            margin: 1rem;
-        }
-        .left-panel {
-            flex: 3;
-            background-color: #fff;
-            padding: 2rem;
-            border-right: 1px solid #e5e7eb;
-            display: flex;
-            flex-direction: column;
-        }
-        .right-panel {
-            flex: 1;
-            background-color: #f9fafb;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .tabs {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
-        .tab-button {
-            padding: 0.75rem 1.5rem;
-            border-bottom: 3px solid transparent;
-            font-weight: 500;
-            color: #6b7280;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .tab-button.active {
-            border-bottom-color: #1c64f2;
-            color: #1c64f2;
-        }
-        .question-panel {
-            flex-grow: 1;
-            padding: 1.5rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            margin-top: 1.5rem;
-        }
-        .question-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-            color: #4b5563;
-        }
-        .question-text {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #111827;
-            margin-bottom: 1.5rem;
-        }
-        .options-list label {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 0.75rem;
-        }
-        .options-list label:hover {
-            background-color: #eff6ff;
-            border-color: #3b82f6;
-        }
-        .options-list input[type="radio"] {
-            display: none;
-        }
-        .options-list input[type="radio"]:checked + span {
-            background-color: #1c64f2;
-            border-color: #1c64f2;
-        }
-        .options-list input[type="radio"]:checked + span::after {
-            opacity: 1;
-        }
-        .options-list .custom-radio {
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid #9ca3af;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-        .options-list .custom-radio::after {
-            content: '';
-            width: 0.625rem;
-            height: 0.625rem;
-            background-color: #fff;
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .options-list .option-text {
-            font-size: 1rem;
-            color: #374151;
-            font-weight: 400;
-        }
-        .navigation-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        .navigation-buttons button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .navigation-buttons .next {
-            background-color: #1c64f2;
-            color: #fff;
-        }
-        .navigation-buttons .next:hover {
-            background-color: #1a56db;
-        }
-        .summary-box {
-            background-color: #e5e7eb;
-            padding: 1rem;
-            border-radius: 0.5rem;
-        }
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-        .summary-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .summary-color {
-            width: 1rem;
-            height: 1rem;
-            border-radius: 0.25rem;
-        }
-        .summary-text {
-            font-size: 0.875rem;
-            color: #4b5563;
-        }
-        .question-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-        .question-number-button {
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #4b5563;
-            border: 1px solid #d1d5db;
-        }
-        .question-number-button.not-visited {
-            background-color: #f3f4f6;
-        }
-        .question-number-button.answered {
-            background-color: #10b981;
-            color: #fff;
-        }
-        .question-number-button.not-answered {
-            background-color: #f87171;
-            color: #fff;
-        }
-        .question-number-button.marked-for-review {
-            background-color: #3b82f6;
-            color: #fff;
-        }
-        .footer-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: auto;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e5e7eb;
-        }
-        .footer-buttons button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .footer-buttons .save-next {
-            background-color: #1c64f2;
-            color: #fff;
-        }
-        .footer-buttons .save-next:hover {
-            background-color: #1a56db;
-        }
-        .footer-buttons .submit {
-            background-color: #ef4444;
-            color: #fff;
-        }
-        .footer-buttons .submit:hover {
-            background-color: #dc2626;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>गणित क्विझ - लहान मुलांसाठी</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+    .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #333; }
+    .question { margin-bottom: 20px; }
+    .options input { margin-right: 10px; }
+    .correct { color: green; font-weight: bold; }
+    .wrong { color: red; font-weight: bold; }
+    #submitBtn { background: #007bff; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    #submitBtn:hover { background: #0056b3; }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h2>🔢 लहान मुलांसाठी गणित क्विझ</h2>
+    <form id="quizForm">
+      <!-- Questions will be inserted here -->
+    </form>
+    <button id="submitBtn" onclick="checkAnswers()">उत्तर तपासा</button>
+  </div>
 
-    <div class="container">
-        <!-- डावी बाजू: प्रश्न आणि पर्याय -->
-        <div class="left-panel">
-            <div class="header">
-                <div class="tabs">
-                    <button class="tab-button active" data-section="computer">COMPUTER PROFICIENCY</button>
-                    <button class="tab-button" data-section="math">QUANTITATIVE APTITUDE</button>
-                </div>
-            </div>
+  <script>
+    const questions = [
+      { q: "12 + 15 = ?", options: ["25", "27", "28", "26"], answer: 1 },
+      { q: "30 – 10 = ?", options: ["10", "15", "20", "25"], answer: 2 },
+      { q: "5 गुणिले 6 = ?", options: ["30", "25", "20", "35"], answer: 0 },
+      { q: "24 ÷ 4 = ?", options: ["5", "6", "7", "4"], answer: 1 },
+      { q: "50 चे 10% किती?", options: ["10", "15", "5", "20"], answer: 2 },
+      { q: "100 – 25 = ?", options: ["80", "75", "85", "70"], answer: 1 },
+      { q: "9 गुणिले 2 = ?", options: ["16", "18", "20", "21"], answer: 1 },
+      { q: "36 ÷ 6 = ?", options: ["5", "6", "7", "8"], answer: 1 },
+      { q: "₹200 वर 25% सवलत, अंतिम किंमत?", options: ["₹150", "₹175", "₹180", "₹160"], answer: 0 },
+      { q: "8 + 7 = ?", options: ["16", "15", "14", "13"], answer: 1 }
+    ];
 
-            <div class="question-panel">
-                <div class="question-status">
-                    <span>प्रश्न प्रकार: MCQ</span>
-                    <span>|</span>
-                    <span>योग्य उत्तरासाठी गुण: 1</span>
-                    <span>|</span>
-                    <span>नकारात्मक गुण: 0</span>
-                </div>
-                <div class="question-text">
-                    <span id="question-text"></span>
-                </div>
-                <div class="options-list" id="options-list">
-                    <!-- प्रश्न आणि पर्याय येथे JavaScript द्वारे लोड केले जातील -->
-                </div>
-            </div>
+    const form = document.getElementById("quizForm");
 
-            <div class="footer-buttons">
-                <div class="left-buttons flex gap-2">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Mark for Review & Next</button>
-                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Clear Response</button>
-                </div>
-                <div class="right-buttons flex gap-2">
-                    <button id="prev-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">मागे</button>
-                    <button id="next-btn" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">पुढचा</button>
-                </div>
-            </div>
-        </div>
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<strong>Q${i+1}. ${q.q}</strong><br>` +
+        q.options.map((opt, j) => `
+          <label>
+            <input type="radio" name="q${i}" value="${j}"> ${opt}
+          </label><br>`).join("");
+      form.appendChild(div);
+    });
 
-        <!-- उजवी बाजू: सारांश आणि प्रश्न क्रमांक -->
-        <div class="right-panel">
-            <div class="user-info text-center flex items-center justify-center gap-2 mb-4">
-                <img src="https://placehold.co/50x50/e2e8f0/718096?text=👤" alt="User Image" class="rounded-full">
-                <span class="font-bold text-gray-800">John Doe</span>
-            </div>
-            
-            <div class="summary-box">
-                <h3 class="font-bold text-gray-700">सारांश</h3>
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <div class="summary-color bg-green-500"></div>
-                        <span class="summary-text">उत्तर दिले</span>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-color bg-red-500"></div>
-                        <span class="summary-text">उत्तर दिले नाही</span>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-color bg-gray-400"></div>
-                        <span class="summary-text">पाहिले नाही</span>
-                    </div>
-                    <div class="summary-item">
-                        <div class="summary-color bg-blue-500"></div>
-                        <span class="summary-text">पुनरावलोकनासाठी चिन्हांकित</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="choose-question mt-4">
-                <h3 class="font-bold text-gray-700">प्रश्न निवडा</h3>
-                <div class="question-grid" id="question-grid">
-                    <!-- प्रश्न क्रमांक येथे JavaScript द्वारे लोड केले जातील -->
-                </div>
-            </div>
-
-            <div class="submit-section mt-auto pt-4 border-t border-gray-200">
-                <button class="w-full py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition">Submit</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sections = {
-                computer: [
-                    {
-                        id: 1,
-                        text: 'EDVAC या शब्दाचा अर्थ काय आहे?',
-                        options: [
-                            'इलेक्ट्रॉनिक डिस्क्रीट व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
-                            'इलेक्ट्रॉनिक डिक्रीट व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
-                            'इलेक्ट्रॉनिक डिस्क व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर',
-                            'इलेक्ट्रॉनिक डाटा व्हेरिएबल ऑटोमॅटिक कॉम्प्युटर'
-                        ]
-                    },
-                    {
-                        id: 2,
-                        text: 'खालीलपैकी कोणता इनपुट डिव्हाइस नाही?',
-                        options: [
-                            'कीबोर्ड',
-                            'माऊस',
-                            'मॉनिटर',
-                            'जॉयस्टिक'
-                        ]
-                    },
-                    {
-                        id: 3,
-                        text: '1 किलोबाइट (KB) मध्ये किती बाइट्स असतात?',
-                        options: [
-                            '1000',
-                            '1024',
-                            '1048',
-                            '980'
-                        ]
-                    },
-                    {
-                        id: 4,
-                        text: 'एका वेबसाइटच्या पहिल्या पानाला काय म्हणतात?',
-                        options: [
-                            'मेन पेज',
-                            'होम पेज',
-                            'फर्स्ट पेज',
-                            'बॅनर्स'
-                        ]
-                    }
-                ],
-                math: [
-                    {
-                        id: 1,
-                        text: 'एका संख्येतून 15% कमी केल्यावर 255 मिळते, तर ती संख्या कोणती?',
-                        options: [
-                            '280',
-                            '300',
-                            '290',
-                            '275'
-                        ]
-                    },
-                    {
-                        id: 2,
-                        text: 'दोन संख्यांचे गुणोत्तर 3:5 आहे आणि त्यांची बेरीज 80 आहे, तर त्या संख्या कोणत्या?',
-                        options: [
-                            '30 आणि 50',
-                            '20 आणि 60',
-                            '40 आणि 40',
-                            '32 आणि 48'
-                        ]
-                    },
-                    {
-                        id: 3,
-                        text: 'जर एका व्यक्तीने 20% नफ्याने एक वस्तू ₹1200 ला विकली, तर त्या वस्तूची मूळ किंमत काय असेल?',
-                        options: [
-                            '₹1000',
-                            '₹960',
-                            '₹1080',
-                            '₹1100'
-                        ]
-                    },
-                    {
-                        id: 4,
-                        text: 'एका वर्तुळाची त्रिज्या 7 सेमी असल्यास, त्याचे क्षेत्रफळ किती असेल?',
-                        options: [
-                            '154 चौ.सेमी.',
-                            '49 चौ.सेमी.',
-                            '22 चौ.सेमी.',
-                            '44 चौ.सेमी.'
-                        ]
-                    }
-                ]
-            };
-
-            let currentSection = 'computer';
-            let currentQuestionIndex = 0;
-
-            const questionTextElement = document.getElementById('question-text');
-            const optionsListElement = document.getElementById('options-list');
-            const questionGridElement = document.getElementById('question-grid');
-            const nextBtn = document.getElementById('next-btn');
-            const prevBtn = document.getElementById('prev-btn');
-            const tabs = document.querySelectorAll('.tab-button');
-
-            function renderQuestion(section, index) {
-                const question = sections[section][index];
-                if (!question) return;
-
-                questionTextElement.textContent = `प्रश्न ${question.id}: ${question.text}`;
-                optionsListElement.innerHTML = ''; 
-                question.options.forEach((option, i) => {
-                    const label = document.createElement('label');
-                    label.innerHTML = `
-                        <input type="radio" name="answer" value="option${i + 1}">
-                        <span class="custom-radio"></span>
-                        <span class="option-text">${option}</span>
-                    `;
-                    optionsListElement.appendChild(label);
-                });
-
-                prevBtn.disabled = index === 0;
-                nextBtn.disabled = index === sections[section].length - 1;
-            }
-
-            function renderQuestionGrid(section) {
-                questionGridElement.innerHTML = '';
-                sections[section].forEach((q) => {
-                    const button = document.createElement('button');
-                    button.classList.add('question-number-button', 'not-visited');
-                    button.textContent = q.id;
-                    button.dataset.id = q.id;
-                    questionGridElement.appendChild(button);
-                });
-            }
-
-            function updateQuestionGrid() {
-                const buttons = questionGridElement.querySelectorAll('.question-number-button');
-                buttons.forEach(button => {
-                    const questionId = parseInt(button.dataset.id);
-                    if (questionId === currentQuestionIndex + 1) {
-                        button.classList.add('bg-blue-500', 'text-white');
-                    } else {
-                        button.classList.remove('bg-blue-500', 'text-white');
-                    }
-                });
-            }
-
-            function handleNavigation(direction) {
-                if (direction === 'next' && currentQuestionIndex < sections[currentSection].length - 1) {
-                    currentQuestionIndex++;
-                } else if (direction === 'prev' && currentQuestionIndex > 0) {
-                    currentQuestionIndex--;
-                }
-                renderQuestion(currentSection, currentQuestionIndex);
-                updateQuestionGrid();
-            }
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    currentSection = tab.dataset.section;
-                    currentQuestionIndex = 0;
-                    renderQuestion(currentSection, currentQuestionIndex);
-                    renderQuestionGrid(currentSection);
-                    updateQuestionGrid();
-                });
-            });
-
-            nextBtn.addEventListener('click', () => handleNavigation('next'));
-            prevBtn.addEventListener('click', () => handleNavigation('prev'));
-            
-            questionGridElement.addEventListener('click', (e) => {
-                const button = e.target.closest('.question-number-button');
-                if (button) {
-                    const questionId = parseInt(button.dataset.id);
-                    currentQuestionIndex = questionId - 1;
-                    renderQuestion(currentSection, currentQuestionIndex);
-                    updateQuestionGrid();
-                }
-            });
-
-            // सुरुवातीला पहिला विभाग आणि पहिला प्रश्न रेंडर करा
-            renderQuestion(currentSection, currentQuestionIndex);
-            renderQuestionGrid(currentSection);
-            updateQuestionGrid();
+    function checkAnswers() {
+      const form = document.forms["quizForm"];
+      questions.forEach((q, i) => {
+        const selected = form[`q${i}`].value;
+        const div = form[`q${i}`][0].closest(".question");
+        const labels = div.querySelectorAll("label");
+        labels.forEach((label, j) => {
+          label.classList.remove("correct", "wrong");
+          if (parseInt(selected) === j && j === q.answer) {
+            label.classList.add("correct");
+          } else if (parseInt(selected) === j && j !== q.answer) {
+            label.classList.add("wrong");
+          }
+          if (j === q.answer && parseInt(selected) !== q.answer) {
+            label.classList.add("correct");
+          }
         });
-    </script>
-
+      });
+    }
+  </script>
 </body>
 </html>
