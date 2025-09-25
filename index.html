@@ -1,112 +1,784 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="UTF-8">
-  <title>गणित क्विझ - सवलत आणि टक्केवारी</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
-    .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; color: #333; }
-    .question { margin-bottom: 20px; }
-    .options input { margin-right: 10px; }
-    .correct { color: green; font-weight: bold; }
-    .wrong { color: red; font-weight: bold; }
-    #submitBtn { background: #007bff; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-    #submitBtn:hover { background: #0056b3; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>प्रयोगशाळा सहायक आणि तंत्रज्ञ सराव परीक्षा</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .question-section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+        .question {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #0056b3;
+        }
+        .option label {
+            display: block;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option label:hover {
+            background-color: #e9e9e9;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #1e7e34;
+        }
+        .correct {
+            background-color: #c8e6c9 !important; /* Green for correct answer */
+            border: 2px solid #4CAF50;
+        }
+        .incorrect {
+            background-color: #ffcdd2 !important; /* Red for incorrect answer */
+            border: 2px solid #f44336;
+        }
+        .result-message {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>📊 सवलत आणि टक्केवारी - ५० गणित प्रश्न</h2>
-    <form id="quizForm"></form>
-    <button id="submitBtn" onclick="checkAnswers()">उत्तर तपासा</button>
-  </div>
 
-  <script>
-    const questions = [
-      { q: "₹500 वर 20% सवलत दिल्यास वस्तूची अंतिम किंमत किती होईल?", options: ["₹400", "₹420", "₹450", "₹480"], answer: 0 },
-      { q: "100 चं 25% किती होईल?", options: ["20", "25", "30", "35"], answer: 1 },
-      { q: "₹800 वर 30% सवलत दिल्यास अंतिम किंमत किती?", options: ["₹560", "₹600", "₹640", "₹580"], answer: 0 },
-      { q: "250 चे 10% किती?", options: ["20", "25", "30", "35"], answer: 1 },
-      { q: "₹600 वस्तूवर 50% सवलत दिली तर किती द्यावे लागतील?", options: ["₹200", "₹250", "₹300", "₹400"], answer: 2 },
-      { q: "120 चे 75% किती?", options: ["80", "85", "90", "95"], answer: 2 },
-      { q: "₹1000 वर 40% सवलत दिली, अंतिम किंमत किती?", options: ["₹600", "₹700", "₹800", "₹900"], answer: 0 },
-      { q: "90 चं 10% किती?", options: ["9", "8", "10", "7"], answer: 0 },
-      { q: "₹120 वर 15% सवलत मिळाली, अंतिम किंमत?", options: ["₹100", "₹102", "₹105", "₹108"], answer: 1 },
-      { q: "60 चे 20% किती?", options: ["10", "12", "14", "15"], answer: 1 },
-      { q: "₹200 वर 25% सवलत दिली, अंतिम किंमत किती?", options: ["₹150", "₹160", "₹170", "₹180"], answer: 0 },
-      { q: "80 चे 50% किती?", options: ["30", "35", "40", "45"], answer: 2 },
-      { q: "₹300 वर 10% सवलत दिली, अंतिम किंमत किती?", options: ["₹260", "₹270", "₹280", "₹290"], answer: 1 },
-      { q: "70 चं 30% किती?", options: ["18", "19", "21", "24"], answer: 2 },
-      { q: "₹150 वर 40% सवलत दिली, अंतिम किंमत?", options: ["₹90", "₹95", "₹100", "₹105"], answer: 0 },
-      { q: "45 चं 20% किती?", options: ["9", "10", "11", "12"], answer: 0 },
-      { q: "₹600 वर 25% सवलत दिली, अंतिम किंमत?", options: ["₹400", "₹420", "₹450", "₹470"], answer: 2 },
-      { q: "200 चे 5% किती?", options: ["10", "15", "20", "25"], answer: 0 },
-      { q: "₹900 वर 10% सवलत दिली, अंतिम किंमत?", options: ["₹800", "₹810", "₹820", "₹830"], answer: 1 },
-      { q: "50 चे 60% किती?", options: ["25", "30", "35", "40"], answer: 1 },
-      { q: "₹250 वर 10% सवलत दिली, अंतिम किंमत?", options: ["₹220", "₹225", "₹230", "₹235"], answer: 1 },
-      { q: "400 चे 75% किती?", options: ["300", "310", "320", "330"], answer: 0 },
-      { q: "₹100 वर 5% सवलत दिली, अंतिम किंमत?", options: ["₹90", "₹93", "₹95", "₹97"], answer: 2 },
-      { q: "80 चं 15% किती?", options: ["10", "12", "14", "16"], answer: 2 },
-      { q: "₹350 वर 20% सवलत दिली, अंतिम किंमत?", options: ["₹270", "₹280", "₹290", "₹300"], answer: 1 },
-      { q: "₹180 वर 50% सवलत दिली, अंतिम किंमत?", options: ["₹80", "₹85", "₹90", "₹95"], answer: 2 },
-      { q: "60 चं 40% किती?", options: ["20", "22", "24", "26"], answer: 2 },
-      { q: "₹220 वर 25% सवलत दिली, अंतिम किंमत?", options: ["₹150", "₹155", "₹160", "₹165"], answer: 3 },
-      { q: "30 चे 10% किती?", options: ["2", "3", "4", "5"], answer: 1 },
-      { q: "₹500 वर 5% सवलत दिली, अंतिम किंमत?", options: ["₹470", "₹475", "₹480", "₹485"], answer: 1 },
-      { q: "₹600 वर 10% सवलत दिली, अंतिम किंमत?", options: ["₹530", "₹540", "₹550", "₹560"], answer: 1 },
-      { q: "40 चे 25% किती?", options: ["8", "9", "10", "11"], answer: 0 },
-      { q: "₹700 वर 20% सवलत दिली, अंतिम किंमत?", options: ["₹540", "₹550", "₹560", "₹580"], answer: 2 },
-      { q: "90 चे 90% किती?", options: ["72", "75", "81", "85"], answer: 2 },
-      { q: "₹300 वर 15% सवलत दिली, अंतिम किंमत?", options: ["₹240", "₹250", "₹255", "₹260"], answer: 2 },
-      { q: "₹480 वर 60% सवलत दिली, अंतिम किंमत?", options: ["₹180", "₹190", "₹200", "₹210"], answer: 0 },
-      { q: "100 चे 90% किती?", options: ["85", "88", "90", "92"], answer: 2 },
-      { q: "₹400 वर 5% सवलत दिली, अंतिम किंमत?", options: ["₹375", "₹380", "₹385", "₹390"], answer: 3 },
-      { q: "75 चे 75% किती?", options: ["50", "55", "56.25", "60"], answer: 2 },
-      { q: "₹900 वर 33% सवलत दिली, अंतिम किंमत?", options: ["₹600", "₹603", "₹604", "₹605"], answer: 1 },
-      { q: "200 चे 60% किती?", options: ["100", "110", "120", "130"], answer: 2 },
-      { q: "₹850 वर 40% सवलत दिली, अंतिम किंमत?", options: ["₹500", "₹510", "₹520", "₹530"], answer: 0 },
-      { q: "120 चे 15% किती?", options: ["15", "16", "17", "18"], answer: 3 },
-      { q: "₹700 वर 10% सवलत दिली, अंतिम किंमत?", options: ["₹620", "₹630", "₹640", "₹650"], answer: 1 },
-      { q: "65 चे 20% किती?", options: ["12", "13", "14", "15"], answer: 1 },
-      { q: "₹550 वर 30% सवलत दिली, अंतिम किंमत?", options: ["₹370", "₹380", "₹385", "₹390"], answer: 0 },
-      { q: "180 चे 10% किती?", options: ["15", "16", "17", "18"], answer: 3 },
-      { q: "₹1000 वर 90% सवलत दिली, अंतिम किंमत?", options: ["₹100", "₹90", "₹110", "₹120"], answer: 1 },
-      { q: "₹150 वर 33% सवलत दिली, अंतिम किंमत?", options: ["₹100", "₹101", "₹102", "₹103"], answer: 1 },
-      { q: "₹400 वर 75% सवलत दिली, अंतिम किंमत?", options: ["₹100", "₹110", "₹120", "₹130"], answer: 0 }
-    ];
+<div class="container">
+    <h1>प्रयोगशाळा सहायक आणि तंत्रज्ञ सराव परीक्षा</h1>
+    <p style="text-align: center; color: #666;">एकूण प्रश्न: 80</p>
+    <form id="quizForm">
 
-    const form = document.getElementById("quizForm");
-    questions.forEach((q, i) => {
-      const div = document.createElement("div");
-      div.className = "question";
-      div.innerHTML = `<strong>Q${i+1}. ${q.q}</strong><br>` +
-        q.options.map((opt, j) => `
-          <label>
-            <input type="radio" name="q${i}" value="${j}"> ${opt}
-          </label><br>`).join("");
-      form.appendChild(div);
-    });
+        <h2>🔬 प्रयोगशाळा सहायक (Laboratory Assistant) - 40 प्रश्न</h2>
+        <div id="section-lab-assistant">
+            <div class="question-section" data-q-id="1" data-correct-option="B">
+                <div class="question">1. महाराष्ट्राचे सध्याचे राज्यपाल कोण आहेत?</div>
+                <div class="option"><input type="radio" name="q1" value="A" id="q1A"><label for="q1A">A) भगतसिंह कोश्यारी</label></div>
+                <div class="option"><input type="radio" name="q1" value="B" id="q1B"><label for="q1B">B) रमेश बैस</label></div>
+                <div class="option"><input type="radio" name="q1" value="C" id="q1C"><label for="q1C">C) सी. विद्यासागर राव</label></div>
+                <div class="option"><input type="radio" name="q1" value="D" id="q1D"><label for="q1D">D) के. शंकरनारायणन</label></div>
+            </div>
 
-    function checkAnswers() {
-      const form = document.forms["quizForm"];
-      questions.forEach((q, i) => {
-        const selected = form[`q${i}`].value;
-        const div = form[`q${i}`][0].closest(".question");
-        const labels = div.querySelectorAll("label");
-        labels.forEach((label, j) => {
-          label.classList.remove("correct", "wrong");
-          if (parseInt(selected) === j && j === q.answer) {
-            label.classList.add("correct");
-          } else if (parseInt(selected) === j && j !== q.answer) {
-            label.classList.add("wrong");
-          }
-          if (j === q.answer && parseInt(selected) !== q.answer) {
-            label.classList.add("correct");
-          }
+            <div class="question-section" data-q-id="2" data-correct-option="C">
+                <div class="question">2. 'राज्यघटनेच्या शिल्पकार' म्हणून कोणास ओळखले जाते?</div>
+                <div class="option"><input type="radio" name="q2" value="A" id="q2A"><label for="q2A">A) महात्मा गांधी</label></div>
+                <div class="option"><input type="radio" name="q2" value="B" id="q2B"><label for="q2B">B) जवाहरलाल नेहरू</label></div>
+                <div class="option"><input type="radio" name="q2" value="C" id="q2C"><label for="q2C">C) डॉ. बाबासाहेब आंबेडकर</label></div>
+                <div class="option"><input type="radio" name="q2" value="D" id="q2D"><label for="q2D">D) सरदार वल्लभभाई पटेल</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="3" data-correct-option="A">
+                <div class="question">3. खालीलपैकी कोणते मराठी व्याकरण संबंधी अशुद्ध आहे? (उच्चाराप्रमाणे विचार करून)</div>
+                <div class="option"><input type="radio" name="q3" value="A" id="q3A"><label for="q3A">A) नाम</label></div>
+                <div class="option"><input type="radio" name="q3" value="B" id="q3B"><label for="q3B">B) क्रियापद</label></div>
+                <div class="option"><input type="radio" name="q3" value="C" id="q3C"><label for="q3C">C) विशेषण</label></div>
+                <div class="option"><input type="radio" name="q3" value="D" id="q3D"><label for="q3D">D) अलंकार</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="4" data-correct-option="B">
+                <div class="question">4. 'कानाचा पडदा' या वाक्प्रचाराचा अर्थ काय?</div>
+                <div class="option"><input type="radio" name="q4" value="A" id="q4A"><label for="q4A">A) आवाज ऐकू न येणे</label></div>
+                <div class="option"><input type="radio" name="q4" value="B" id="q4B"><label for="q4B">B) लक्ष देऊन ऐकणे</label></div>
+                <div class="option"><input type="radio" name="q4" value="C" id="q4C"><label for="q4C">C) कान दुखणे</label></div>
+                <div class="option"><input type="radio" name="q4" value="D" id="q4D"><label for="q4D">D) मोठ्याने ओरडणे</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="5" data-correct-option="B">
+                <div class="question">5. **15, 20, 25, 30, ?** या क्रमाने पुढील संख्या कोणती येईल?</div>
+                <div class="option"><input type="radio" name="q5" value="A" id="q5A"><label for="q5A">A) 32</label></div>
+                <div class="option"><input type="radio" name="q5" value="B" id="q5B"><label for="q5B">B) 35</label></div>
+                <div class="option"><input type="radio" name="q5" value="C" id="q5C"><label for="q5C">C) 40</label></div>
+                <div class="option"><input type="radio" name="q5" value="D" id="q5D"><label for="q5D">D) 38</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="6" data-correct-option="B">
+                <div class="question">6. एका विशिष्ट भाषेत 'CAT' ला 'DDU' असे लिहितात, तर 'DOG' ला काय लिहाल?</div>
+                <div class="option"><input type="radio" name="q6" value="A" id="q6A"><label for="q6A">A) EPH</label></div>
+                <div class="option"><input type="radio" name="q6" value="B" id="q6B"><label for="q6B">B) EPJ</label></div>
+                <div class="option"><input type="radio" name="q6" value="C" id="q6C"><label for="q6C">C) EQH</label></div>
+                <div class="option"><input type="radio" name="q6" value="D" id="q6D"><label for="q6D">D) ERI</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="7" data-correct-option="B">
+                <div class="question">7. $x+5 = 12$ तर $x$ ची किंमत काय आहे?</div>
+                <div class="option"><input type="radio" name="q7" value="A" id="q7A"><label for="q7A">A) 17</label></div>
+                <div class="option"><input type="radio" name="q7" value="B" id="q7B"><label for="q7B">B) 7</label></div>
+                <div class="option"><input type="radio" name="q7" value="C" id="q7C"><label for="q7C">C) 60</label></div>
+                <div class="option"><input type="radio" name="q7" value="D" id="q7D"><label for="q7D">D) 5</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="8" data-correct-option="B">
+                <div class="question">8. भारताच्या राष्ट्रीय माहिती अधिकार कायदा (RTI) कोणत्या वर्षी लागू झाला?</div>
+                <div class="option"><input type="radio" name="q8" value="A" id="q8A"><label for="q8A">A) 2004</label></div>
+                <div class="option"><input type="radio" name="q8" value="B" id="q8B"><label for="q8B">B) 2005</label></div>
+                <div class="option"><input type="radio" name="q8" value="C" id="q8C"><label for="q8C">C) 2006</label></div>
+                <div class="option"><input type="radio" name="q8" value="D" id="q8D"><label for="q8D">D) 2010</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="9" data-correct-option="C">
+                <div class="question">9. 'The synonym for **Huge** is:'</div>
+                <div class="option"><input type="radio" name="q9" value="A" id="q9A"><label for="q9A">A) Tiny</label></div>
+                <div class="option"><input type="radio" name="q9" value="B" id="q9B"><label for="q9B">B) Small</label></div>
+                <div class="option"><input type="radio" name="q9" value="C" id="q9C"><label for="q9C">C) Gigantic</label></div>
+                <div class="option"><input type="radio" name="q9" value="D" id="q9D"><label for="q9D">D) Brief</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="10" data-correct-option="B">
+                <div class="question">10. भारताचे राष्ट्रीय फूल कोणते आहे?</div>
+                <div class="option"><input type="radio" name="q10" value="A" id="q10A"><label for="q10A">A) गुलाब</label></div>
+                <div class="option"><input type="radio" name="q10" value="B" id="q10B"><label for="q10B">B) कमळ</label></div>
+                <div class="option"><input type="radio" name="q10" value="C" id="q10C"><label for="q10C">C) सूर्यफूल</label></div>
+                <div class="option"><input type="radio" name="q10" value="D" id="q10D"><label for="q10D">D) लिली</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="11" data-correct-option="B">
+                <div class="question">11. प्रयोगशाळेत वापरले जाणारे **पिपेट (Pipette)** हे उपकरण कशासाठी वापरले जाते?</div>
+                <div class="option"><input type="radio" name="q11" value="A" id="q11A"><label for="q11A">A) वजन करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q11" value="B" id="q11B"><label for="q11B">B) निश्चित प्रमाणात द्रव मोजण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q11" value="C" id="q11C"><label for="q11C">C) द्रव गरम करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q11" value="D" id="q11D"><label for="q11D">D) द्रावण ढवळण्यासाठी</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="12" data-correct-option="B">
+                <div class="question">12. निर्जंतुकीकरण (Sterilization) प्रक्रियेचा मुख्य उद्देश काय आहे?</div>
+                <div class="option"><input type="radio" name="q12" value="A" id="q12A"><label for="q12A">A) तापमान नियंत्रित करणे</label></div>
+                <div class="option"><input type="radio" name="q12" value="B" id="q12B"><label for="q12B">B) सूक्ष्मजीव नष्ट करणे</label></div>
+                <div class="option"><input type="radio" name="q12" value="C" id="q12C"><label for="q12C">C) द्रावणाचा pH बदलणे</label></div>
+                <div class="option"><input type="radio" name="q12" value="D" id="q12D"><label for="q12D">D) द्रव साठवणे</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="13" data-correct-option="B">
+                <div class="question">13. रक्ताचे नमुना घेण्यासाठी कोणत्या प्रकारची सुई (needle) वापरली जाते?</div>
+                <div class="option"><input type="radio" name="q13" value="A" id="q13A"><label for="q13A">A) इंट्रामस्क्युलर (Intramuscular)</label></div>
+                <div class="option"><input type="radio" name="q13" value="B" id="q13B"><label for="q13B">B) शिरावेधन (Venipuncture)</label></div>
+                <div class="option"><input type="radio" name="q13" value="C" id="q13C"><label for="q13C">C) इंट्राडर्मल (Intradermal)</label></div>
+                <div class="option"><input type="radio" name="q13" value="D" id="q13D"><label for="q13D">D) सबक्युटेनियस (Subcutaneous)</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="14" data-correct-option="D">
+                <div class="question">14. बायोमेडिकल वेस्ट मॅनेजमेंट (Bio-medical waste management) मध्ये, वापरलेल्या सुया (Needles) आणि ब्लेड्स (Blades) कोणत्या रंगाच्या डब्ब्यात (bin) टाकल्या जातात?</div>
+                <div class="option"><input type="radio" name="q14" value="A" id="q14A"><label for="q14A">A) पिवळा (Yellow)</label></div>
+                <div class="option"><input type="radio" name="q14" value="B" id="q14B"><label for="q14B">B) लाल (Red)</label></div>
+                <div class="option"><input type="radio" name="q14" value="C" id="q14C"><label for="q14C">C) निळा (Blue)</label></div>
+                <div class="option"><input type="radio" name="q14" value="D" id="q14D"><label for="q14D">D) पांढरा (White Translucent)</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="15" data-correct-option="B">
+                <div class="question">15. रासायनिक निर्जंतुकीकरणासाठी (Chemical disinfection) खालीलपैकी कशाचा वापर केला जातो?</div>
+                <div class="option"><input type="radio" name="q15" value="A" id="q15A"><label for="q15A">A) ऑटोकलेव्ह (Autoclave)</label></div>
+                <div class="option"><input type="radio" name="q15" value="B" id="q15B"><label for="q15B">B) फॉर्मेल्डीहाइड (Formaldehyde)</label></div>
+                <div class="option"><input type="radio" name="q15" value="C" id="q15C"><label for="q15C">C) ड्राय हीट ओव्हन (Dry Heat Oven)</label></div>
+                <div class="option"><input type="radio" name="q15" value="D" id="q15D"><label for="q15D">D) अल्ट्राव्हायोलेट प्रकाश (UV Light)</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="16" data-correct-option="B">
+                <div class="question">16. प्रयोगशाळेतील उपकरणांचे योग्य **घरेलू काळजी (Housekeeping)** का आवश्यक आहे?</div>
+                <div class="option"><input type="radio" name="q16" value="A" id="q16A"><label for="q16A">A) अधिक जागा मिळवण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q16" value="B" id="q16B"><label for="q16B">B) उपकरणांची कार्यक्षमता आणि अचूकता टिकवण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q16" value="C" id="q16C"><label for="q16C">C) अधिक वीज वापरण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q16" value="D" id="q16D"><label for="q16D">D) कर्मचाऱ्यांची संख्या कमी करण्यासाठी</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="17" data-correct-option="B">
+                <div class="question">17. प्रयोगशाळेतील नमुन्याची (Sample) **लेबलिंग (Labeling)** करताना कोणती माहिती सर्वात महत्त्वाची आहे?</div>
+                <div class="option"><input type="radio" name="q17" value="A" id="q17A"><label for="q17A">A) नमुन्याचा रंग</label></div>
+                <div class="option"><input type="radio" name="q17" value="B" id="q17B"><label for="q17B">B) रुग्णाचे नाव, आयडी आणि नमुना घेण्याची वेळ</label></div>
+                <div class="option"><input type="radio" name="q17" value="C" id="q17C"><label for="q17C">C) प्रयोगशाळा सहायकाचे नाव</label></div>
+                <div class="option"><input type="radio" name="q17" value="D" id="q17D"><label for="q17D">D) तपासणीचा खर्च</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="18" data-correct-option="B">
+                <div class="question">18. प्रयोगशाळेत **गुणवत्ता नियंत्रण (Quality Control)** का महत्त्वाचे आहे?</div>
+                <div class="option"><input type="radio" name="q18" value="A" id="q18A"><label for="q18A">A) तपासणीचा वेग कमी करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q18" value="B" id="q18B"><label for="q18B">B) तपासणीचे परिणाम अचूक आणि विश्वसनीय आहेत याची खात्री करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q18" value="C" id="q18C"><label for="q18C">C) उपकरणांची किंमत वाढवण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q18" value="D" id="q18D"><label for="q18D">D) कर्मचाऱ्यांवर दबाव टाकण्यासाठी</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="19" data-correct-option="B">
+                <div class="question">19. **तापमापक (Thermometer)** हे प्रयोगशाळेत कशासाठी वापरले जाते?</div>
+                <div class="option"><input type="radio" name="q19" value="A" id="q19A"><label for="q19A">A) दाब मोजण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q19" value="B" id="q19B"><label for="q19B">B) तापमान मोजण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q19" value="C" id="q19C"><label for="q19C">C) वजन मोजण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q19" value="D" id="q19D"><label for="q19D">D) प्रकाशाची तीव्रता मोजण्यासाठी</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="20" data-correct-option="C">
+                <div class="question">20. बायोमेडिकल वेस्ट मॅनेजमेंटमध्ये 'रेड बॅग' (Red Bag) मध्ये कोणता कचरा टाकला जातो?</div>
+                <div class="option"><input type="radio" name="q20" value="A" id="q20A"><label for="q20A">A) मानवी शारीरिक कचरा (Human anatomical waste)</label></div>
+                <div class="option"><input type="radio" name="q20" value="B" id="q20B"><label for="q20B">B) वापरलेले सिरिंज (Used syringes)</label></div>
+                <div class="option"><input type="radio" name="q20" value="C" id="q20C"><label for="q20C">C) संसर्गजन्य प्लास्टिक कचरा (Contaminated plastic waste)</label></div>
+                <div class="option"><input type="radio" name="q20" value="D" id="q20D"><label for="q20D">D) काच (Glass)</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="21" data-correct-option="A">
+                <div class="question">21. 'शुद्धलेखन' हा शब्द कशाशी संबंधित आहे?</div>
+                <div class="option"><input type="radio" name="q21" value="A" id="q21A"><label for="q21A">A) व्याकरण (Grammar)</label></div>
+                <div class="option"><input type="radio" name="q21" value="B" id="q21B"><label for="q21B">B) गणित (Maths)</label></div>
+                <div class="option"><input type="radio" name="q21" value="C" id="q21C"><label for="q21C">C) तर्कशक्ती (Logic)</label></div>
+                <div class="option"><input type="radio" name="q21" value="D" id="q21D"><label for="q21D">D) विज्ञान (Science)</label></div>
+            </div>
+            <div class="question-section" data-q-id="22" data-correct-option="D">
+                <div class="question">22. खालीलपैकी कोणता मूलभूत वैज्ञानिक विषय नाही?</div>
+                <div class="option"><input type="radio" name="q22" value="A" id="q22A"><label for="q22A">A) भौतिकशास्त्र (Physics)</label></div>
+                <div class="option"><input type="radio" name="q22" value="B" id="q22B"><label for="q22B">B) रसायनशास्त्र (Chemistry)</label></div>
+                <div class="option"><input type="radio" name="q22" value="C" id="q22C"><label for="q22C">C) जीवशास्त्र (Biology)</label></div>
+                <div class="option"><input type="radio" name="q22" value="D" id="q22D"><label for="q22D">D) पर्यावरण अभियांत्रिकी (Env. Engg.)</label></div>
+            </div>
+            <div class="question-section" data-q-id="23" data-correct-option="C">
+                <div class="question">23. ऑटोकलेव्ह (Autoclave) कशासाठी वापरले जाते?</div>
+                <div class="option"><input type="radio" name="q23" value="A" id="q23A"><label for="q23A">A) द्रावण थंड करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q23" value="B" id="q23B"><label for="q23B">B) नमुना मिक्स करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q23" value="C" id="q23C"><label for="q23C">C) उच्च दाबाखाली वाफेने निर्जंतुकीकरण करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q23" value="D" id="q23D"><label for="q23D">D) पीएच मोजण्यासाठी</label></div>
+            </div>
+            <div class="question-section" data-q-id="24" data-correct-option="A">
+                <div class="question">24. 'पायरीडियम' (Pyridium) हे कोणत्या प्रकारच्या कचरा व्यवस्थापनात (Waste Management) येते?</div>
+                <div class="option"><input type="radio" name="q24" value="A" id="q24A"><label for="q24A">A) रासायनिक कचरा (Chemical Waste)</label></div>
+                <div class="option"><input type="radio" name="q24" value="B" id="q24B"><label for="q24B">B) तीक्ष्ण कचरा (Sharps Waste)</label></div>
+                <div class="option"><input type="radio" name="q24" value="C" id="q24C"><label for="q24C">C) संसर्गजन्य कचरा (Infectious Waste)</label></div>
+                <div class="option"><input type="radio" name="q24" value="D" id="q24D"><label for="q24D">D) गैर-संसर्गजन्य कचरा (Non-infectious Waste)</label></div>
+            </div>
+            <div class="question-section" data-q-id="25" data-correct-option="B">
+                <div class="question">25. महाराष्ट्रातील 'गेटवे ऑफ इंडिया' कोणत्या शहरात आहे?</div>
+                <div class="option"><input type="radio" name="q25" value="A" id="q25A"><label for="q25A">A) पुणे</label></div>
+                <div class="option"><input type="radio" name="q25" value="B" id="q25B"><label for="q25B">B) मुंबई</label></div>
+                <div class="option"><input type="radio" name="q25" value="C" id="q25C"><label for="q25C">C) नाशिक</label></div>
+                <div class="option"><input type="radio" name="q25" value="D" id="q25D"><label for="q25D">D) औरंगाबाद</label></div>
+            </div>
+            <div class="question-section" data-q-id="26" data-correct-option="A">
+                <div class="question">26. 'A little bird told me' - या Idiom चा अर्थ काय?</div>
+                <div class="option"><input type="radio" name="q26" value="A" id="q26A"><label for="q26A">A) I heard a secret from an unknown source</label></div>
+                <div class="option"><input type="radio" name="q26" value="B" id="q26B"><label for="q26B">B) A bird spoke to me</label></div>
+                <div class="option"><input type="radio" name="q26" value="C" id="q26C"><label for="q26C">C) I read it in the newspaper</label></div>
+                <div class="option"><input type="radio" name="q26" value="D" id="q26D"><label for="q26D">D) A friend gave me a hint</label></div>
+            </div>
+            <div class="question-section" data-q-id="27" data-correct-option="C">
+                <div class="question">27. 'Fill in the blanks: The cat jumped **____** the table.'</div>
+                <div class="option"><input type="radio" name="q27" value="A" id="q27A"><label for="q27A">A) in</label></div>
+                <div class="option"><input type="radio" name="q27" value="B" id="q27B"><label for="q27B">B) at</label></div>
+                <div class="option"><input type="radio" name="q27" value="C" id="q27C"><label for="q27C">C) onto</label></div>
+                <div class="option"><input type="radio" name="q27" value="D" id="q27D"><label for="q27D">D) under</label></div>
+            </div>
+            <div class="question-section" data-q-id="28" data-correct-option="B">
+                <div class="question">28. 2, 4, 8, 16, ? - या क्रमाने पुढील संख्या कोणती येईल?</div>
+                <div class="option"><input type="radio" name="q28" value="A" id="q28A"><label for="q28A">A) 24</label></div>
+                <div class="option"><input type="radio" name="q28" value="B" id="q28B"><label for="q28B">B) 32</label></div>
+                <div class="option"><input type="radio" name="q28" value="C" id="q28C"><label for="q28C">C) 36</label></div>
+                <div class="option"><input type="radio" name="q28" value="D" id="q28D"><label for="q28D">D) 64</label></div>
+            </div>
+            <div class="question-section" data-q-id="29" data-correct-option="D">
+                <div class="question">29. महाराष्ट्रातील 'Information Technology Act 2000' (IT Act 2000) चा मूळ उद्देश काय आहे?</div>
+                <div class="option"><input type="radio" name="q29" value="A" id="q29A"><label for="q29A">A) जमीन सुधारणा</label></div>
+                <div class="option"><input type="radio" name="q29" value="B" id="q29B"><label for="q29B">B) पर्यावरण संरक्षण</label></div>
+                <div class="option"><input type="radio" name="q29" value="C" id="q29C"><label for="q29C">C) सायबर गुन्ह्यांवर नियंत्रण आणि इलेक्ट्रॉनिक दस्तऐवजांना कायदेशीर मान्यता</label></div>
+                <div class="option"><input type="radio" name="q29" value="D" id="q29D"><label for="q29D">D) शिक्षण पद्धती सुधारणे</label></div>
+            </div>
+            <div class="question-section" data-q-id="30" data-correct-option="C">
+                <div class="question">30. 'इन्व्हेंटरी कंट्रोल' (Inventory Control) म्हणजे काय?</div>
+                <div class="option"><input type="radio" name="q30" value="A" id="q30A"><label for="q30A">A) कर्मचाऱ्यांची संख्या मोजणे</label></div>
+                <div class="option"><input type="radio" name="q30" value="B" id="q30B"><label for="q30B">B) रुग्णांची नोंदणी करणे</label></div>
+                <div class="option"><input type="radio" name="q30" value="C" id="q30C"><label for="q30C">C) प्रयोगशाळेतील आवश्यक वस्तूंचा साठा व्यवस्थापित करणे</label></div>
+                <div class="option"><input type="radio" name="q30" value="D" id="q30D"><label for="q30D">D) उपकरणांची दुरुस्ती करणे</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="31" data-correct-option="B">
+                <div class="question">31. 'माहिती व तंत्रज्ञान संबंधित मूलभूत ज्ञान' (IT Related Basic Knowledge) मध्ये 'RAM' चा पूर्ण रूप काय आहे?</div>
+                <div class="option"><input type="radio" name="q31" value="A" id="q31A"><label for="q31A">A) Read Access Memory</label></div>
+                <div class="option"><input type="radio" name="q31" value="B" id="q31B"><label for="q31B">B) Random Access Memory</label></div>
+                <div class="option"><input type="radio" name="q31" value="C" id="q31C"><label for="q31C">C) Remote Access Module</label></div>
+                <div class="option"><input type="radio" name="q31" value="D" id="q31D"><label for="q31D">D) Rapid Application Module</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="32" data-correct-option="A">
+                <div class="question">32. 'भारताचे लोहपुरुष' म्हणून कोणास ओळखले जाते?</div>
+                <div class="option"><input type="radio" name="q32" value="A" id="q32A"><label for="q32A">A) सरदार वल्लभभाई पटेल</label></div>
+                <div class="option"><input type="radio" name="q32" value="B" id="q32B"><label for="q32B">B) लोकमान्य टिळक</label></div>
+                <div class="option"><input type="radio" name="q32" value="C" id="q32C"><label for="q32C">C) नेताजी सुभाषचंद्र बोस</label></div>
+                <div class="option"><input type="radio" name="q32" value="D" id="q32D"><label for="q32D">D) पंडित नेहरू</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="33" data-correct-option="C">
+                <div class="question">33. 'मेघालयाची राजधानी' कोणती आहे?</div>
+                <div class="option"><input type="radio" name="q33" value="A" id="q33A"><label for="q33A">A) इंफाळ</label></div>
+                <div class="option"><input type="radio" name="q33" value="B" id="q33B"><label for="q33B">B) कोहिमा</label></div>
+                <div class="option"><input type="radio" name="q33" value="C" id="q33C"><label for="q33C">C) शिलाँग</label></div>
+                <div class="option"><input type="radio" name="q33" value="D" id="q33D"><label for="q33D">D) आयझॉल</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="34" data-correct-option="B">
+                <div class="question">34. 'To break the ice' या Idiom चा अर्थ काय?</div>
+                <div class="option"><input type="radio" name="q34" value="A" id="q34A"><label for="q34A">A) To make the situation worse</label></div>
+                <div class="option"><input type="radio" name="q34" value="B" id="q34B"><label for="q34B">B) To start a conversation in a formal setting</label></div>
+                <div class="option"><input type="radio" name="q34" value="C" id="q34C"><label for="q34C">C) To break a glass</label></div>
+                <div class="option"><input type="radio" name="q34" value="D" id="q34D"><label for="q34D">D) To make someone angry</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="35" data-correct-option="A">
+                <div class="question">35. 'पर्यायी व्यवस्था' या शब्दाचा योग्य इंग्रजी अर्थ काय आहे?</div>
+                <div class="option"><input type="radio" name="q35" value="A" id="q35A"><label for="q35A">A) Alternative Arrangement</label></div>
+                <div class="option"><input type="radio" name="q35" value="B" id="q35B"><label for="q35B">B) Old System</label></div>
+                <div class="option"><input type="radio" name="q35" value="C" id="q35C"><label for="q35C">C) Standard Procedure</label></div>
+                <div class="option"><input type="radio" name="q35" value="D" id="q35D"><label for="q35D">D) Final Decision</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="36" data-correct-option="B">
+                <div class="question">36. 400 चा 25% किती आहे?</div>
+                <div class="option"><input type="radio" name="q36" value="A" id="q36A"><label for="q36A">A) 50</label></div>
+                <div class="option"><input type="radio" name="q36" value="B" id="q36B"><label for="q36B">B) 100</label></div>
+                <div class="option"><input type="radio" name="q36" value="C" id="q36C"><label for="q36C">C) 150</label></div>
+                <div class="option"><input type="radio" name="q36" value="D" id="q36D"><label for="q36D">D) 200</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="37" data-correct-option="C">
+                <div class="question">37. खालीलपैकी कोणता नमुना 'जैविक धोका' (Biohazard) म्हणून चिन्हांकित करणे आवश्यक आहे?</div>
+                <div class="option"><input type="radio" name="q37" value="A" id="q37A"><label for="q37A">A) सामान्य पाणी</label></div>
+                <div class="option"><input type="radio" name="q37" value="B" id="q37B"><label for="q37B">B) स्वच्छ काचेचे उपकरण</label></div>
+                <div class="option"><input type="radio" name="q37" value="C" id="q37C"><label for="q37C">C) Hepatitis B पॉझिटिव्ह रुग्णाचे रक्त</label></div>
+                <div class="option"><input type="radio" name="q37" value="D" id="q37D"><label for="q37D">D) निर्जंतुकीकृत सुई</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="38" data-correct-option="A">
+                <div class="question">38. 'योग्य जोड्या लावा': लेखक - पुस्तक</div>
+                <div class="option"><input type="radio" name="q38" value="A" id="q38A"><label for="q38A">A) पूल देशपांडे - बटाट्याची चाळ</label></div>
+                <div class="option"><input type="radio" name="q38" value="B" id="q38B"><label for="q38B">B) वि.वा. शिरवाडकर - अमृतवेल</label></div>
+                <div class="option"><input type="radio" name="q38" value="C" id="q38C"><label for="q38C">C) ना.सी. फडके - ययाति आणि देवयानी</label></div>
+                <div class="option"><input type="radio" name="q38" value="D" id="q38D"><label for="q38D">D) रणजित देसाई - स्वामी</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="39" data-correct-option="C">
+                <div class="question">39. 'मराठी व्याकरण' मध्ये, 'अव्यय' म्हणजे काय?</div>
+                <div class="option"><input type="radio" name="q39" value="A" id="q39A"><label for="q39A">A) विशेषण</label></div>
+                <div class="option"><input type="radio" name="q39" value="B" id="q39B"><label for="q39B">B) क्रियापद</label></div>
+                <div class="option"><input type="radio" name="q39" value="C" id="q39C"><label for="q39C">C) ज्या शब्दाच्या रूपात लिंग, वचन, विभक्तीनुसार बदल होत नाही</label></div>
+                <div class="option"><input type="radio" name="q39" value="D" id="q39D"><label for="q39D">D) नाम</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="40" data-correct-option="B">
+                <div class="question">40. प्रयोगशाळेतील उपकरणांचे 'प्रकार' (Type of test done in a medical laboratory) नुसार वर्गीकरण कशासाठी उपयुक्त आहे?</div>
+                <div class="option"><input type="radio" name="q40" value="A" id="q40A"><label for="q40A">A) फर्निचर खरेदी करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q40" value="B" id="q40B"><label for="q40B">B) कार्यक्षम वापर, अचूकता आणि देखभाल सुनिश्चित करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q40" value="C" id="q40C"><label for="q40C">C) पाण्याची बचत करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q40" value="D" id="q40D"><label for="q40D">D) वीज बिल कमी करण्यासाठी</label></div>
+            </div>
+        </div>
+        
+        <hr>
+
+        <h2>🔬 प्रयोगशाळा तंत्रज्ञ (Laboratory Technician) - 40 प्रश्न</h2>
+        <div id="section-lab-technician">
+
+            <div class="question-section" data-q-id="41" data-correct-option="B">
+                <div class="question">41. **बायोकेमिस्ट्री (Biochemistry)** चा मुख्य अभ्यास कशावर केंद्रित असतो?</div>
+                <div class="option"><input type="radio" name="q41" value="A" id="q41A"><label for="q41A">A) जीवाणूंचा अभ्यास</label></div>
+                <div class="option"><input type="radio" name="q41" value="B" id="q41B"><label for="q41B">B) सजीवांमध्ये होणाऱ्या रासायनिक प्रक्रियांचा अभ्यास</label></div>
+                <div class="option"><input type="radio" name="q41" value="C" id="q41C"><label for="q41C">C) शरीराच्या ऊतींचा (tissues) अभ्यास</label></div>
+                <div class="option"><input type="radio" name="q41" value="D" id="q41D"><label for="q41D">D) रक्तातील प्लेटलेट्सचा अभ्यास</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="42" data-correct-option="B">
+                <div class="question">42. पॅथॉलॉजी (Pathology) चा मुख्य उद्देश काय आहे?</div>
+                <div class="option"><input type="radio" name="q42" value="A" id="q42A"><label for="q42A">A) आजारांची लक्षणे दूर करणे</label></div>
+                <div class="option"><input type="radio" name="q42" value="B" id="q42B"><label for="q42B">B) आजारांचे कारण, विकास आणि स्वरूप ओळखणे</label></div>
+                <div class="option"><input type="radio" name="q42" value="C" id="q42C"><label for="q42C">C) रुग्णांना औषधे देणे</label></div>
+                <div class="option"><input type="radio" name="q42" value="D" id="q42D"><label for="q42D">D) शस्त्रक्रिया करणे</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="43" data-correct-option="C">
+                <div class="question">43. **हिस्टोपॅथॉलॉजी (Histo-Pathology)** मध्ये कशाचा अभ्यास केला जातो?</div>
+                <div class="option"><input type="radio" name="q43" value="A" id="q43A"><label for="q43A">A) जीवाणू</label></div>
+                <div class="option"><input type="radio" name="q43" value="B" id="q43B"><label for="q43B">B) संपूर्ण अवयव (Organs)</label></div>
+                <div class="option"><input type="radio" name="q43" value="C" id="q43C"><label for="q43C">C) ऊतींचे (Tissues) रोगनिदान</label></div>
+                <div class="option"><input type="radio" name="q43" value="D" id="q43D"><label for="q43D">D) रक्ताचे घटक</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="44" data-correct-option="C">
+                <div class="question">44. **मायक्रोबायोलॉजी (Microbiology)** मध्ये कशाचा अभ्यास केला जातो?</div>
+                <div class="option"><input type="radio" name="q44" value="A" id="q44A"><label for="q44A">A) मोठे प्राणी</label></div>
+                <div class="option"><input type="radio" name="q44" value="B" id="q44B"><label for="q44B">B) वनस्पती</label></div>
+                <div class="option"><input type="radio" name="q44" value="C" id="q44C"><label for="q44C">C) सूक्ष्मजीव (Bacteria, Fungi, Virus)</label></div>
+                <div class="option"><input type="radio" name="q44" value="D" id="q44D"><label for="q44D">D) खनिजे</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="45" data-correct-option="B">
+                <div class="question">45. रक्ताच्या नमुन्यातून **सीरम (Serum)** वेगळे करण्यासाठी कोणती प्रक्रिया वापरली जाते?</div>
+                <div class="option"><input type="radio" name="q45" value="A" id="q45A"><label for="q45A">A) फिल्ट्रेशन (Filtration)</label></div>
+                <div class="option"><input type="radio" name="q45" value="B" id="q45B"><label for="q45B">B) सेंट्रीफ्यूगेशन (Centrifugation)</label></div>
+                <div class="option"><input type="radio" name="q45" value="C" id="q45C"><label for="q45C">C) आसवन (Distillation)</label></div>
+                <div class="option"><input type="radio" name="q45" value="D" id="q45D"><label for="q45D">D) वाष्पीकरण (Evaporation)</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="46" data-correct-option="B">
+                <div class="question">46. **रक्तदान (Blood Transfusion)** करण्यापूर्वी सर्वात महत्त्वाची तपासणी कोणती आहे?</div>
+                <div class="option"><input type="radio" name="q46" value="A" id="q46A"><label for="q46A">A) हेमोग्लोबिन तपासणी</label></div>
+                <div class="option"><input type="radio" name="q46" value="B" id="q46B"><label for="q46B">B) रक्तगट जुळवणी (Cross-matching)</label></div>
+                <div class="option"><input type="radio" name="q46" value="C" id="q46C"><label for="q46C">C) शुगर तपासणी</label></div>
+                <div class="option"><input type="radio" name="q46" value="D" id="q46D"><label for="q46D">D) किडनी कार्य चाचणी</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="47" data-correct-option="C">
+                <div class="question">47. **हेमॅटोलॉजी (Haematology)** मध्ये प्रामुख्याने कशाचा अभ्यास केला जातो?</div>
+                <div class="option"><input type="radio" name="q47" value="A" id="q47A"><label for="q47A">A) यकृत</label></div>
+                <div class="option"><input type="radio" name="q47" value="B" id="q47B"><label for="q47B">B) मूत्रपिंड</label></div>
+                <div class="option"><input type="radio" name="q47" value="C" id="q47C"><label for="q47C">C) रक्त आणि रक्त तयार करणारे अवयव</label></div>
+                <div class="option"><input type="radio" name="q47" value="D" id="q47D"><label for="q47D">D) त्वचा</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="48" data-correct-option="B">
+                <div class="question">48. 'मॉलिक्युलर बायोलॉजी' (Molecular Biology) मध्ये कशाचा अभ्यास होतो?</div>
+                <div class="option"><input type="radio" name="q48" value="A" id="q48A"><label for="q48A">A) अणु संरचना</label></div>
+                <div class="option"><input type="radio" name="q48" value="B" id="q48B"><label for="q48B">B) पेशीतील जैविक रेणू (उदा. DNA, RNA, Proteins)</label></div>
+                <div class="option"><input type="radio" name="q48" value="C" id="q48C"><label for="q48C">C) प्राणी व्यवहार</label></div>
+                <div class="option"><input type="radio" name="q48" value="D" id="q48D"><label for="q48D">D) पृथ्वीचा भूभाग</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="49" data-correct-option="B">
+                <div class="question">49. **सेरोलॉजी (Serology)** मध्ये कशाची तपासणी केली जाते?</div>
+                <div class="option"><input type="radio" name="q49" value="A" id="q49A"><label for="q49A">A) मूत्र</label></div>
+                <div class="option"><input type="radio" name="q49" value="B" id="q49B"><label for="q49B">B) रक्त सीरममधील ॲन्टिबॉडीज (Antibodies)</label></div>
+                <div class="option"><input type="radio" name="q49" value="C" id="q49C"><label for="q49C">C) स्नायू</label></div>
+                <div class="option"><input type="radio" name="q49" value="D" id="q49D"><label for="q49D">D) चरबीचे प्रमाण</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="50" data-correct-option="C">
+                <div class="question">50. 'शिरपेच' या शब्दाचा योग्य समानार्थी शब्द कोणता?</div>
+                <div class="option"><input type="radio" name="q50" value="A" id="q50A"><label for="q50A">A) अंगठी</label></div>
+                <div class="option"><input type="radio" name="q50" value="B" id="q50B"><label for="q50B">B) हार</label></div>
+                <div class="option"><input type="radio" name="q50" value="C" id="q50C"><label for="q50C">C) मुकुट</label></div>
+                <div class="option"><input type="radio" name="q50" value="D" id="q50D"><label for="q50D">D) कंगन</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="51" data-correct-option="C">
+                <div class="question">51. महाराष्ट्रातील कोणत्या शहराला 'भारताची आर्थिक राजधानी' (Financial Capital of India) म्हणतात?</div>
+                <div class="option"><input type="radio" name="q51" value="A" id="q51A"><label for="q51A">A) पुणे</label></div>
+                <div class="option"><input type="radio" name="q51" value="B" id="q51B"><label for="q51B">B) नागपूर</label></div>
+                <div class="option"><input type="radio" name="q51" value="C" id="q51C"><label for="q51C">C) मुंबई</label></div>
+                <div class="option"><input type="radio" name="q51" value="D" id="q51D"><label for="q51D">D) नाशिक</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="52" data-correct-option="A">
+                <div class="question">52. **1/2 + 1/4** याचे उत्तर काय आहे?</div>
+                <div class="option"><input type="radio" name="q52" value="A" id="q52A"><label for="q52A">A) 3/4</label></div>
+                <div class="option"><input type="radio" name="q52" value="B" id="q52B"><label for="q52B">B) 1/6</label></div>
+                <div class="option"><input type="radio" name="q52" value="C" id="q52C"><label for="q52C">C) 2/6</label></div>
+                <div class="option"><input type="radio" name="q52" value="D" id="q52D"><label for="q52D">D) 1/2</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="53" data-correct-option="B">
+                <div class="question">53. 'Patience is a **virtue**.' (Choose the correct synonym for the bold word)</div>
+                <div class="option"><input type="radio" name="q53" value="A" id="q53A"><label for="q53A">A) Fault</label></div>
+                <div class="option"><input type="radio" name="q53" value="B" id="q53B"><label for="q53B">B) Good quality</label></div>
+                <div class="option"><input type="radio" name="q53" value="C" id="q53C"><label for="q53C">C) Weakness</label></div>
+                <div class="option"><input type="radio" name="q53" value="D" id="q53D"><label for="q53D">D) Bad habit</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="54" data-correct-option="B">
+                <div class="question">54. मराठीमध्ये 'पाय दुखणे' या अर्थाचा वाक्प्रचार कोणता?</div>
+                <div class="option"><input type="radio" name="q54" value="A" id="q54A"><label for="q54A">A) पायात काटा मोडणे</label></div>
+                <div class="option"><input type="radio" name="q54" value="B" id="q54B"><label for="q54B">B) पाय पाठीशी नसणे</label></div>
+                <div class="option"><input type="radio" name="q54" value="C" id="q54C"><label for="q54C">C) पाऊल पुढे टाकणे</label></div>
+                <div class="option"><input type="radio" name="q54" value="D" id="q54D"><label for="q54D">D) पाऊल वाकडे पडणे</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="55" data-correct-option="B">
+                <div class="question">55. 1000 रुपयांवर 10% दराने 2 वर्षांचे सरळ व्याज (Simple Interest) किती होईल?</div>
+                <div class="option"><input type="radio" name="q55" value="A" id="q55A"><label for="q55A">A) 100 रुपये</label></div>
+                <div class="option"><input type="radio" name="q55" value="B" id="q55B"><label for="q55B">B) 200 रुपये</label></div>
+                <div class="option"><input type="radio" name="q55" value="C" id="q55C"><label for="q55C">C) 120 रुपये</label></div>
+                <div class="option"><input type="radio" name="q55" value="D" id="q55D"><label for="q55D">D) 210 रुपये</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="56" data-correct-option="D">
+                <div class="question">56. 'Fill in the blanks: She **____** to the market yesterday.'</div>
+                <div class="option"><input type="radio" name="q56" value="A" id="q56A"><label for="q56A">A) go</label></div>
+                <div class="option"><input type="radio" name="q56" value="B" id="q56B"><label for="q56B">B) goes</label></div>
+                <div class="option"><input type="radio" name="q56" value="C" id="q56C"><label for="q56C">C) gone</label></div>
+                <div class="option"><input type="radio" name="q56" value="D" id="q56D"><label for="q56D">D) went</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="57" data-correct-option="C">
+                <div class="question">57. प्रकाश संश्लेषण (Photosynthesis) प्रक्रियेत कोणता वायू शोषला जातो?</div>
+                <div class="option"><input type="radio" name="q57" value="A" id="q57A"><label for="q57A">A) ऑक्सिजन</label></div>
+                <div class="option"><input type="radio" name="q57" value="B" id="q57B"><label for="q57B">B) नायट्रोजन</label></div>
+                <div class="option"><input type="radio" name="q57" value="C" id="q57C"><label for="q57C">C) कार्बन डायऑक्साइड</label></div>
+                <div class="option"><input type="radio" name="q57" value="D" id="q57D"><label for="q57D">D) हायड्रोजन</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="58" data-correct-option="B">
+                <div class="question">58. 'Information and Technology Related Basic Knowledge' मध्ये, 'CPU' चा पूर्ण रूप काय आहे?</div>
+                <div class="option"><input type="radio" name="q58" value="A" id="q58A"><label for="q58A">A) Central Power Unit</label></div>
+                <div class="option"><input type="radio" name="q58" value="B" id="q58B"><label for="q58B">B) Central Processing Unit</label></div>
+                <div class="option"><input type="radio" name="q58" value="C" id="q58C"><label for="q58C">C) Computer Personal Utility</label></div>
+                <div class="option"><input type="radio" name="q58" value="D" id="q58D"><label for="q58D">D) Core Program Utility</label></div>
+            </div>
+
+            <div class="question-section" data-q-id="59" data-correct-option="B">
+                <div class="question">59. 'गुळाचा गणपती' या म्हणीचा अर्थ काय आहे?</div>
+                <div class="option"><input type="radio" name="q59" value="A" id="q59A"><label for="q59A">A) गोड बोलणारा</label></div>
+                <div class="option"><input type="radio" name="q59" value="B" id="q59B"><label for="q59B">B) आळशी मनुष्य</label></div>
+                <div class="option"><input type="radio" name="q59" value="C" id="q59C"><label for="q59C">C) खूप काम करणारा</label></div>
+                <div class="option"><input type="radio" name="q59" value="D" id="q59D"><label for="q59D">D) शक्तीशाली माणूस</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="60" data-correct-option="D">
+                <div class="question">60. मायकोलॉजी (Mycology) मध्ये कशाचा अभ्यास केला जातो?</div>
+                <div class="option"><input type="radio" name="q60" value="A" id="q60A"><label for="q60A">A) जीवाणू</label></div>
+                <div class="option"><input type="radio" name="q60" value="B" id="q60B"><label for="q60B">B) विषाणू</label></div>
+                <div class="option"><input type="radio" name="q60" value="C" id="q60C"><label for="q60C">C) प्रोटोझोआ</label></div>
+                <div class="option"><input type="radio" name="q60" value="D" id="q60D"><label for="q60D">D) बुरशी (Fungi)</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="61" data-correct-option="A">
+                <div class="question">61. रक्त पेढी (Blood Banking) मध्ये, रक्त किती तापमानाला साठवले जाते?</div>
+                <div class="option"><input type="radio" name="q61" value="A" id="q61A"><label for="q61A">A) $2^{\circ}\text{C}$ ते $6^{\circ}\text{C}$</label></div>
+                <div class="option"><input type="radio" name="q61" value="B" id="q61B"><label for="q61B">B) $15^{\circ}\text{C}$ ते $20^{\circ}\text{C}$</label></div>
+                <div class="option"><input type="radio" name="q61" value="C" id="q61C"><label for="q61C">C) $25^{\circ}\text{C}$ ते $30^{\circ}\text{C}$</label></div>
+                <div class="option"><input type="radio" name="q61" value="D" id="q61D"><label for="q61D">D) $37^{\circ}\text{C}$</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="62" data-correct-option="D">
+                <div class="question">62. 'Immunology and Serology' मध्ये, ॲन्टिबॉडीज (Antibodies) कशासाठी वापरल्या जातात?</div>
+                <div class="option"><input type="radio" name="q62" value="A" id="q62A"><label for="q62A">A) रक्त पातळ करण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q62" value="B" id="q62B"><label for="q62B">B) रक्तातील साखर मोजण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q62" value="C" id="q62C"><label for="q62C">C) प्रथिने पचनासाठी</label></div>
+                <div class="option"><input type="radio" name="q62" value="D" id="q62D"><label for="q62D">D) रोगप्रतिकार प्रतिसाद (Immune response) ओळखण्यासाठी</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="63" data-correct-option="A">
+                <div class="question">63. 'Clinical Pathology' मध्ये कशाचा समावेश होतो?</div>
+                <div class="option"><input type="radio" name="q63" value="A" id="q63A"><label for="q63A">A) रक्त, मूत्र आणि शरीरातील द्रवांची तपासणी</label></div>
+                <div class="option"><input type="radio" name="q63" value="B" id="q63B"><label for="q63B">B) शस्त्रक्रिया</label></div>
+                <div class="option"><input type="radio" name="q63" value="C" id="q63C"><label for="q63C">C) त्वचा रोग निदान</label></div>
+                <div class="option"><input type="radio" name="q63" value="D" id="q63D"><label for="q63D">D) दातांची काळजी</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="64" data-correct-option="D">
+                <div class="question">64. **DNA** चा पूर्ण रूप काय आहे?</div>
+                <div class="option"><input type="radio" name="q64" value="A" id="q64A"><label for="q64A">A) Deoxy Nitrogen Acid</label></div>
+                <div class="option"><input type="radio" name="q64" value="B" id="q64B"><label for="q64B">B) Double Nucleotide Axis</label></div>
+                <div class="option"><input type="radio" name="q64" value="C" id="q64C"><label for="q64C">C) Deoxy Ribose Nucleus</label></div>
+                <div class="option"><input type="radio" name="q64" value="D" id="q64D"><label for="q64D">D) Deoxyribonucleic Acid</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="65" data-correct-option="B">
+                <div class="question">65. 'Basic Sciences' मध्ये 'pH' (Power of Hydrogen) काय दर्शवितो?</div>
+                <div class="option"><input type="radio" name="q65" value="A" id="q65A"><label for="q65A">A) द्रावणाची घनता</label></div>
+                <div class="option"><input type="radio" name="q65" value="B" id="q65B"><label for="q65B">B) द्रावणाची आम्लधर्मीयता किंवा अल्कधर्मीयता</label></div>
+                <div class="option"><input type="radio" name="q65" value="C" id="q65C"><label for="q65C">C) द्रावणाचा रंग</label></div>
+                <div class="option"><input type="radio" name="q65" value="D" id="q65D"><label for="q65D">D) द्रावणाचे तापमान</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="66" data-correct-option="A">
+                <div class="question">66. **A, C, E, G, ?** या क्रमाने पुढील अक्षर कोणते येईल?</div>
+                <div class="option"><input type="radio" name="q66" value="A" id="q66A"><label for="q66A">A) I</label></div>
+                <div class="option"><input type="radio" name="q66" value="B" id="q66B"><label for="q66B">B) H</label></div>
+                <div class="option"><input type="radio" name="q66" value="C" id="q66C"><label for="q66C">C) J</label></div>
+                <div class="option"><input type="radio" name="q66" value="D" id="q66D"><label for="q66D">D) K</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="67" data-correct-option="B">
+                <div class="question">67. 'समास' म्हणजे काय?</div>
+                <div class="option"><input type="radio" name="q67" value="A" id="q67A"><label for="q67A">A) शब्दांची पुनरावृत्ती</label></div>
+                <div class="option"><input type="radio" name="q67" value="B" id="q67B"><label for="q67B">B) दोन किंवा अधिक शब्द एकत्र येऊन एक जोडशब्द तयार करणे</label></div>
+                <div class="option"><input type="radio" name="q67" value="C" id="q67C"><label for="q67C">C) शब्दांचा अर्थ बदलणे</label></div>
+                <div class="option"><input type="radio" name="q67" value="D" id="q67D"><label for="q67D">D) कविता लिहिणे</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="68" data-correct-option="D">
+                <div class="question">68. 'विरुद्धार्थी शब्द': **जुनट**</div>
+                <div class="option"><input type="radio" name="q68" value="A" id="q68A"><label for="q68A">A) जुने</label></div>
+                <div class="option"><input type="radio" name="q68" value="B" id="q68B"><label for="q68B">B) ऐतिहासिक</label></div>
+                <div class="option"><input type="radio" name="q68" value="C" id="q68C"><label for="q68C">C) प्राचीन</label></div>
+                <div class="option"><input type="radio" name="q68" value="D" id="q68D"><label for="q68D">D) आधुनिक</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="69" data-correct-option="A">
+                <div class="question">69. 'Tense' (काळ) चा वापर कशासाठी केला जातो?</div>
+                <div class="option"><input type="radio" name="q69" value="A" id="q69A"><label for="q69A">A) क्रिया कधी घडली हे दर्शवण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q69" value="B" id="q69B"><label for="q69B">B) वस्तूचे नाव देण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q69" value="C" id="q69C"><label for="q69C">C) वाक्यात विशेषण जोडण्यासाठी</label></div>
+                <div class="option"><input type="radio" name="q69" value="D" id="q69D"><label for="q69D">D) विरामचिन्ह वापरण्यासाठी</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="70" data-correct-option="C">
+                <div class="question">70. 'Fill in the blanks: I like both tea **____** coffee.'</div>
+                <div class="option"><input type="radio" name="q70" value="A" id="q70A"><label for="q70A">A) or</label></div>
+                <div class="option"><input type="radio" name="q70" value="B" id="q70B"><label for="q70B">B) nor</label></div>
+                <div class="option"><input type="radio" name="q70" value="C" id="q70C"><label for="q70C">C) and</label></div>
+                <div class="option"><input type="radio" name="q70" value="D" id="q70D"><label for="q70D">D) but</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="71" data-correct-option="B">
+                <div class="question">71. पृथ्वीवरील सर्वात मोठा खंड कोणता?</div>
+                <div class="option"><input type="radio" name="q71" value="A" id="q71A"><label for="q71A">A) आफ्रिका</label></div>
+                <div class="option"><input type="radio" name="q71" value="B" id="q71B"><label for="q71B">B) आशिया</label></div>
+                <div class="option"><input type="radio" name="q71" value="C" id="q71C"><label for="q71C">C) युरोप</label></div>
+                <div class="option"><input type="radio" name="q71" value="D" id="q71D"><label for="q71D">D) उत्तर अमेरिका</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="72" data-correct-option="A">
+                <div class="question">72. 'Sports and Culture' मध्ये, 'कबड्डी' या खेळात किती खेळाडू असतात?</div>
+                <div class="option"><input type="radio" name="q72" value="A" id="q72A"><label for="q72A">A) 7</label></div>
+                <div class="option"><input type="radio" name="q72" value="B" id="q72B"><label for="q72B">B) 9</label></div>
+                <div class="option"><input type="radio" name="q72" value="C" id="q72C"><label for="q72C">C) 11</label></div>
+                <div class="option"><input type="radio" name="q72" value="D" id="q72D"><label for="q72D">D) 5</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="73" data-correct-option="D">
+                <div class="question">73. 'Right to Information Act 2005' नुसार माहिती किती दिवसांत पुरवणे बंधनकारक आहे?</div>
+                <div class="option"><input type="radio" name="q73" value="A" id="q73A"><label for="q73A">A) 10 दिवस</label></div>
+                <div class="option"><input type="radio" name="q73" value="B" id="q73B"><label for="q73B">B) 15 दिवस</label></div>
+                <div class="option"><input type="radio" name="q73" value="C" id="q73C"><label for="q73C">C) 60 दिवस</label></div>
+                <div class="option"><input type="radio" name="q73" value="D" id="q73D"><label for="q73D">D) 30 दिवस</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="74" data-correct-option="C">
+                <div class="question">74. 'Basic Arithmetic Knowledge' मध्ये, $4^3$ ची किंमत काय आहे?</div>
+                <div class="option"><input type="radio" name="q74" value="A" id="q74A"><label for="q74A">A) 12</label></div>
+                <div class="option"><input type="radio" name="q74" value="B" id="q74B"><label for="q74B">B) 16</label></div>
+                <div class="option"><input type="radio" name="q74" value="C" id="q74C"><label for="q74C">C) 64</label></div>
+                <div class="option"><input type="radio" name="q74" value="D" id="q74D"><label for="q74D">D) 43</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="75" data-correct-option="B">
+                <div class="question">75. 'Synonym for **Ancient**'</div>
+                <div class="option"><input type="radio" name="q75" value="A" id="q75A"><label for="q75A">A) Modern</label></div>
+                <div class="option"><input type="radio" name="q75" value="B" id="q75B"><label for="q75B">B) Old</label></div>
+                <div class="option"><input type="radio" name="q75" value="C" id="q75C"><label for="q75C">C) New</label></div>
+                <div class="option"><input type="radio" name="q75" value="D" id="q75D"><label for="q75D">D) Future</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="76" data-correct-option="A">
+                <div class="question">76. 'मराठी व्याकरण' मध्ये, 'संधी' म्हणजे काय?</div>
+                <div class="option"><input type="radio" name="q76" value="A" id="q76A"><label for="q76A">A) जवळजवळ आलेले दोन वर्ण एकत्र होणे</label></div>
+                <div class="option"><input type="radio" name="q76" value="B" id="q76B"><label for="q76B">B) दोन शब्द जोडणे</label></div>
+                <div class="option"><input type="radio" name="q76" value="C" id="q76C"><label for="q76C">C) वाक्यांचा अर्थ स्पष्ट करणे</label></div>
+                <div class="option"><input type="radio" name="q76" value="D" id="q76D"><label for="q76D">D) दोन वाक्यांना जोडणे</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="77" data-correct-option="B">
+                <div class="question">77. रक्तगट 'O-' असलेल्या व्यक्तीला कोणत्या रक्तगटाचे रक्त देता येते?</div>
+                <div class="option"><input type="radio" name="q77" value="A" id="q77A"><label for="q77A">A) केवळ AB+</label></div>
+                <div class="option"><input type="radio" name="q77" value="B" id="q77B"><label for="q77B">B) कोणत्याही रक्तगटाला (Universal Donor)</label></div>
+                <div class="option"><input type="radio" name="q77" value="C" id="q77C"><label for="q77C">C) केवळ O+</label></div>
+                <div class="option"><input type="radio" name="q77" value="D" id="q77D"><label for="q77D">D) केवळ B-</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="78" data-correct-option="D">
+                <div class="question">78. महाराष्ट्रातील **पुणे** शहर कोणत्या नदीच्या काठी वसलेले आहे?</div>
+                <div class="option"><input type="radio" name="q78" value="A" id="q78A"><label for="q78A">A) कृष्णा</label></div>
+                <div class="option"><input type="radio" name="q78" value="B" id="q78B"><label for="q78B">B) गोदावरी</label></div>
+                <div class="option"><input type="radio" name="q78" value="C" id="q78C"><label for="q78C">C) तापी</label></div>
+                <div class="option"><input type="radio" name="q78" value="D" id="q78D"><label for="q78D">D) मुळा-मुठा</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="79" data-correct-option="A">
+                <div class="question">79. 'Aptitude Test' मध्ये, 12, 10, 8, 6, ? - या क्रमाने पुढील संख्या कोणती येईल?</div>
+                <div class="option"><input type="radio" name="q79" value="A" id="q79A"><label for="q79A">A) 4</label></div>
+                <div class="option"><input type="radio" name="q79" value="B" id="q79B"><label for="q79B">B) 5</label></div>
+                <div class="option"><input type="radio" name="q79" value="C" id="q79C"><label for="q79C">C) 7</label></div>
+                <div class="option"><input type="radio" name="q79" value="D" id="q79D"><label for="q79D">D) 9</label></div>
+            </div>
+            
+            <div class="question-section" data-q-id="80" data-correct-option="C">
+                <div class="question">80. 'General Science' मध्ये, मानवी शरीरातील सर्वात मोठी ग्रंथी (Gland) कोणती आहे?</div>
+                <div class="option"><input type="radio" name="q80" value="A" id="q80A"><label for="q80A">A) थायरॉईड</label></div>
+                <div class="option"><input type="radio" name="q80" value="B" id="q80B"><label for="q80B">B) स्वादुपिंड (Pancreas)</label></div>
+                <div class="option"><input type="radio" name="q80" value="C" id="q80C"><label for="q80C">C) यकृत (Liver)</label></div>
+                <div class="option"><input type="radio" name="q80" value="D" id="q80D"><label for="q80D">D) पिट्यूटरी</label></div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">✅ निकाल सबमिट करा</button>
+        <div id="result" class="result-message"></div>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById('quizForm');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const questionSections = document.querySelectorAll('.question-section');
+        let correctCount = 0;
+        let totalCount = questionSections.length;
+
+        questionSections.forEach(section => {
+            const qId = section.dataset.qId;
+            const correctOption = section.dataset.correctOption;
+            const inputName = `q${qId}`;
+            
+            // आधीचे रंग काढून टाका
+            section.querySelectorAll('label').forEach(label => {
+                label.classList.remove('correct', 'incorrect');
+            });
+
+            // वापरकर्त्याने निवडलेला पर्याय
+            const selectedInput = document.querySelector(`input[name="${inputName}"]:checked`);
+            
+            // योग्य उत्तराचे लेबल
+            const correctLabel = document.querySelector(`input[name="${inputName}"][value="${correctOption}"]`).parentElement;
+
+            if (selectedInput) {
+                const selectedOption = selectedInput.value;
+                const selectedLabel = selectedInput.parentElement;
+                
+                if (selectedOption === correctOption) {
+                    // योग्य उत्तर - हिरवा रंग
+                    selectedLabel.classList.add('correct');
+                    correctCount++;
+                } else {
+                    // चुकीचे उत्तर - लाल रंग
+                    selectedLabel.classList.add('incorrect');
+                    // योग्य उत्तराला हिरवा रंग द्या
+                    correctLabel.classList.add('correct');
+                }
+            } else {
+                // प्रश्न अनुत्तरित असल्यास, फक्त योग्य उत्तराला हिरवा रंग द्या
+                correctLabel.classList.add('correct');
+            }
         });
-      });
-    }
-  </script>
+
+        // निकाल दाखवा
+        resultDiv.innerHTML = `तुमचा निकाल: **${correctCount} / ${totalCount}** (${((correctCount / totalCount) * 100).toFixed(2)}%)`;
+    });
+</script>
+
 </body>
 </html>
